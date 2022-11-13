@@ -8,18 +8,28 @@
 
 /* Begin PBXBuildFile section */
 		689B2F9A2920B2C100302362 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B2F992920B2C100302362 /* AppDelegate.swift */; };
-		689B2F9E2920B2C100302362 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B2F9D2920B2C100302362 /* ViewController.swift */; };
+		689B2F9E2920B2C100302362 /* DayStatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B2F9D2920B2C100302362 /* DayStatisticsViewController.swift */; };
 		689B2FA32920B2C300302362 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 689B2FA22920B2C300302362 /* Assets.xcassets */; };
 		689B2FA62920B2C300302362 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 689B2FA42920B2C300302362 /* LaunchScreen.storyboard */; };
+		689B2FAF2920B7C700302362 /* Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B2FAE2920B7C700302362 /* Factory.swift */; };
+		689B2FB12920B99900302362 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B2FB02920B99900302362 /* CircularProgressView.swift */; };
+		689B2FB32920B9C200302362 /* NutrientCircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B2FB22920B9C200302362 /* NutrientCircularProgressView.swift */; };
+		689B2FB52920B9EF00302362 /* NutrientProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B2FB42920B9EF00302362 /* NutrientProgressBarView.swift */; };
+		689B2FB72920BA0B00302362 /* DayProgressComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B2FB62920BA0B00302362 /* DayProgressComponent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		689B2F962920B2C100302362 /* Flynutrition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flynutrition.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		689B2F992920B2C100302362 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		689B2F9D2920B2C100302362 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		689B2F9D2920B2C100302362 /* DayStatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayStatisticsViewController.swift; sourceTree = "<group>"; };
 		689B2FA22920B2C300302362 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		689B2FA52920B2C300302362 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		689B2FA72920B2C300302362 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		689B2FAE2920B7C700302362 /* Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Factory.swift; sourceTree = "<group>"; };
+		689B2FB02920B99900302362 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
+		689B2FB22920B9C200302362 /* NutrientCircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrientCircularProgressView.swift; sourceTree = "<group>"; };
+		689B2FB42920B9EF00302362 /* NutrientProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrientProgressBarView.swift; sourceTree = "<group>"; };
+		689B2FB62920BA0B00302362 /* DayProgressComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayProgressComponent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,12 +63,25 @@
 			isa = PBXGroup;
 			children = (
 				689B2F992920B2C100302362 /* AppDelegate.swift */,
-				689B2F9D2920B2C100302362 /* ViewController.swift */,
+				689B2F9D2920B2C100302362 /* DayStatisticsViewController.swift */,
+				689B2FAE2920B7C700302362 /* Factory.swift */,
+				689B2FAD2920B39400302362 /* Files */,
+				689B2FB02920B99900302362 /* CircularProgressView.swift */,
+				689B2FB22920B9C200302362 /* NutrientCircularProgressView.swift */,
+				689B2FB42920B9EF00302362 /* NutrientProgressBarView.swift */,
+				689B2FB62920BA0B00302362 /* DayProgressComponent.swift */,
+			);
+			path = Flynutrition;
+			sourceTree = "<group>";
+		};
+		689B2FAD2920B39400302362 /* Files */ = {
+			isa = PBXGroup;
+			children = (
 				689B2FA22920B2C300302362 /* Assets.xcassets */,
 				689B2FA42920B2C300302362 /* LaunchScreen.storyboard */,
 				689B2FA72920B2C300302362 /* Info.plist */,
 			);
-			path = Flynutrition;
+			name = Files;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -131,8 +154,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				689B2F9E2920B2C100302362 /* ViewController.swift in Sources */,
+				689B2FB32920B9C200302362 /* NutrientCircularProgressView.swift in Sources */,
+				689B2F9E2920B2C100302362 /* DayStatisticsViewController.swift in Sources */,
+				689B2FB52920B9EF00302362 /* NutrientProgressBarView.swift in Sources */,
 				689B2F9A2920B2C100302362 /* AppDelegate.swift in Sources */,
+				689B2FB12920B99900302362 /* CircularProgressView.swift in Sources */,
+				689B2FB72920BA0B00302362 /* DayProgressComponent.swift in Sources */,
+				689B2FAF2920B7C700302362 /* Factory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
