@@ -13,8 +13,8 @@ class DayProgressComponent: UIView {
     var calorieProgressView = CircularProgressView()
     var waterProgressView = CircularProgressView()
 
-    var caloriesProgressComponent = NutritionProgressView()
-    var waterProgressComponent = NutritionProgressView()
+    var caloriesProgressComponent = NutrientCircularProgressView()
+    var waterProgressComponent = NutrientCircularProgressView()
     
     let circularProgressStack = makeStackView(axis: .horizontal)
     
@@ -47,10 +47,10 @@ class DayProgressComponent: UIView {
 //
         waterProgressView = CircularProgressView(frame: CGRect(x: 0, y: 0, width: frameOfCircularProgressView.width, height: 120), lineWidth: 10, rounded: false)
         
-        caloriesProgressComponent = NutritionProgressView(circularProgressView: calorieProgressView ,imageName: "flame.fill", unit: "kC", color: .systemOrange)
+        caloriesProgressComponent = NutrientCircularProgressView(circularProgressView: calorieProgressView ,imageName: "flame.fill", unit: "kC", color: .systemOrange)
         
         
-        waterProgressComponent = NutritionProgressView(circularProgressView: waterProgressView,imageName: "drop.fill", unit: "ml", color: .systemBlue)
+        waterProgressComponent = NutrientCircularProgressView(circularProgressView: waterProgressView,imageName: "drop.fill", unit: "ml", color: .systemBlue)
         
 
         

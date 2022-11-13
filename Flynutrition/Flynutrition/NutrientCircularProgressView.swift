@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class NutritionProgressView: UIView {
+class NutrientCircularProgressView: UIView {
     var nutritionProgressView = CircularProgressView()
    
     let elementImageView =  UIImageView(image: UIImage(systemName: "flame.fill"))
