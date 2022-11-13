@@ -24,7 +24,7 @@ class DayStatisticsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        view.backgroundColor = .tertiarySystemBackground
+        view.backgroundColor = .systemGray6
         setup()
         layout()
     }
@@ -38,15 +38,7 @@ class DayStatisticsViewController: UIViewController {
         
         setDayProgressComponent()
         
-        dayTableView.translatesAutoresizingMaskIntoConstraints = false
-        dayTableView.delegate = self
-        dayTableView.dataSource = self
-        dayTableView.register(UITableViewCell.self, forCellReuseIdentifier: "myCell")
-        dayTableView.register(ConsumedProductCell.self, forCellReuseIdentifier: ConsumedProductCell.reuseID)
-        dayTableView.sectionHeaderHeight = 5
-        dayTableView.backgroundColor = .clear
-        dayTableView.layer.cornerRadius = 10
-        dayTableView.rowHeight = 55
+        setTableView()
         
         recentlyAddedLabel.translatesAutoresizingMaskIntoConstraints = false
         recentlyAddedLabel.text = "Recently added"
@@ -62,8 +54,9 @@ class DayStatisticsViewController: UIViewController {
         view.addSubview(recentlyAddedLabel)
         view.addSubview(dayTableView)
         
+        
         NSLayoutConstraint.activate([
-            todayLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
+            todayLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 25),
             todayLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
         
@@ -80,7 +73,7 @@ class DayStatisticsViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            dayTableView.topAnchor.constraint(equalTo: dayProgressComponent.bottomAnchor, constant: 64),
+            dayTableView.topAnchor.constraint(equalTo: dayProgressComponent.bottomAnchor, constant: 72),
             dayTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             dayTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             dayTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -103,6 +96,17 @@ class DayStatisticsViewController: UIViewController {
         
         dayProgressComponent.caloriesProgressComponent.nutritionProgressView.progress = 0.9
         
+    }
+    
+    func setTableView() {
+        dayTableView.translatesAutoresizingMaskIntoConstraints = false
+        dayTableView.delegate = self
+        dayTableView.dataSource = self
+        dayTableView.register(UITableViewCell.self, forCellReuseIdentifier: "myCell")
+        dayTableView.register(ConsumedProductCell.self, forCellReuseIdentifier: ConsumedProductCell.reuseID)
+        dayTableView.backgroundColor = .clear
+        dayTableView.layer.cornerRadius = 10
+        dayTableView.rowHeight = 55
     }
 }
 
