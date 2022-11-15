@@ -27,6 +27,7 @@ class DayStatisticsViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         view.backgroundColor = .systemGray6
+        title = "Today"
         setup()
         layout()
     }
@@ -52,24 +53,25 @@ class DayStatisticsViewController: UIViewController {
         let configuredImage = UIImage(systemName: "plus", withConfiguration: sizeConfig)
         addProductButton.setImage(configuredImage, for: .normal)
         addProductButton.tintColor = .white
+        addProductButton.addTarget(self, action: #selector(addProductPressed), for: .primaryActionTriggered)
     }
     
     func layout() {
-        view.addSubview(todayLabel)
+//        view.addSubview(todayLabel)
         view.addSubview(dayProgressComponent)
         view.addSubview(recentlyAddedLabel)
         view.addSubview(dayTableView)
         view.addSubview(addProductButton)
         
         
-        NSLayoutConstraint.activate([
-            todayLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 25),
-            todayLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
+//        NSLayoutConstraint.activate([
+//            todayLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 25),
+//            todayLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+//        ])
         
         
         NSLayoutConstraint.activate([
-            dayProgressComponent.topAnchor.constraint(equalTo: todayLabel.bottomAnchor, constant: 16),
+            dayProgressComponent.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             dayProgressComponent.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             dayProgressComponent.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
@@ -121,6 +123,13 @@ class DayStatisticsViewController: UIViewController {
         dayTableView.backgroundColor = .clear
         dayTableView.layer.cornerRadius = 10
         dayTableView.rowHeight = 55
+    }
+    
+    @objc func addProductPressed() {
+        print("print")
+        let addProductsViewController = AddProductsViewController()
+        addProductsViewController.modalPresentationStyle = .fullScreen
+        present(addProductsViewController, animated: true)
     }
 }
 

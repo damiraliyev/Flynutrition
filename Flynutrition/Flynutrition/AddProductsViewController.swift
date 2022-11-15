@@ -10,6 +10,8 @@ import UIKit
 
 class AddProductsViewController: UIViewController {
     
+    let searchController = UISearchController()
+    
     let tableView = UITableView()
     
     override func viewDidLoad() {
@@ -20,20 +22,24 @@ class AddProductsViewController: UIViewController {
     }
     
     func setup() {
+        searchController.searchBar.translatesAutoresizingMaskIntoConstraints = false
+        
         setupTableView()
-        
-        
-        
     }
     
     func layout() {
+        view.addSubview(searchController.searchBar)
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            
+        ])
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
     }
@@ -43,10 +49,10 @@ class AddProductsViewController: UIViewController {
         tableView.backgroundColor = .clear
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.rowHeight = 55
-        tableView.backgroundColor = .clear
-        tableView.layer.cornerRadius = 20
         tableView.register(AddProductCell.self, forCellReuseIdentifier: AddProductCell.reuseID)
+        tableView.layer.cornerRadius = 10
+        tableView.rowHeight = 52
+        
     }
 }
 
@@ -56,7 +62,7 @@ extension AddProductsViewController: UITableViewDelegate {
 
 extension AddProductsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return 10
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

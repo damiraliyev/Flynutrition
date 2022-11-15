@@ -27,11 +27,11 @@ class AddProductCell: UITableViewCell {
     func setup() {
         productNameLabel.translatesAutoresizingMaskIntoConstraints = false
         productNameLabel.text = "Rice"
-        productNameLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        productNameLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
         amountLabel.translatesAutoresizingMaskIntoConstraints = false
         amountLabel.text = "120g"
-        amountLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        amountLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
         calorieImageView.translatesAutoresizingMaskIntoConstraints = false
         calorieImageView.image = UIImage(named: "Vector.pdf")
@@ -39,13 +39,13 @@ class AddProductCell: UITableViewCell {
         
         calorieAmountLabel.translatesAutoresizingMaskIntoConstraints = false
         calorieAmountLabel.text = "120kC"
-        calorieAmountLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        calorieAmountLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         calorieAmountLabel.textColor = .systemGreen
         
         addButton.translatesAutoresizingMaskIntoConstraints = false
-        addButton.layer.cornerRadius = 16
+        addButton.layer.cornerRadius = 14
         addButton.backgroundColor = .systemBlue
-        let sizeConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .semibold, scale: .medium)
+        let sizeConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .semibold, scale: .medium)
         let configuredImage = UIImage(systemName: "plus", withConfiguration: sizeConfig)
         addButton.setImage(configuredImage, for: .normal)
         addButton.tintColor = .white
@@ -69,8 +69,8 @@ class AddProductCell: UITableViewCell {
         NSLayoutConstraint.activate([
             addButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             addButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            addButton.widthAnchor.constraint(equalToConstant: 32),
-            addButton.heightAnchor.constraint(equalToConstant: 32),
+            addButton.widthAnchor.constraint(equalToConstant: 28),
+            addButton.heightAnchor.constraint(equalToConstant: 28),
         ])
         
         NSLayoutConstraint.activate([
@@ -81,8 +81,8 @@ class AddProductCell: UITableViewCell {
         NSLayoutConstraint.activate([
             calorieImageView.trailingAnchor.constraint(equalTo: calorieAmountLabel.leadingAnchor, constant: -16),
             calorieImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            calorieImageView.widthAnchor.constraint(equalToConstant: 30),
-            calorieImageView.heightAnchor.constraint(equalToConstant: 30)
+            calorieImageView.widthAnchor.constraint(equalToConstant: 28),
+            calorieImageView.heightAnchor.constraint(equalToConstant: 28)
         ])
         
         NSLayoutConstraint.activate([

@@ -23,6 +23,10 @@ class MainTabBarController: UITabBarController {
         dayStatisticsVC.tabBarItem = UITabBarItem(title: "Main", image: UIImage(systemName: "house.fill"), selectedImage: nil)
         
         
+        let dayStatisticsNC = UINavigationController(rootViewController: dayStatisticsVC)
+        dayStatisticsNC.navigationBar.prefersLargeTitles = true
+        
+        
         let addProductsVC = AddProductsViewController()
         addProductsVC.tabBarItem = UITabBarItem(title: "Add", image: UIImage(systemName: "plus"), selectedImage: nil)
         
@@ -32,7 +36,7 @@ class MainTabBarController: UITabBarController {
 //        tabBarAppearance.backgroundColor = .systemBackground
 //        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
         
-        viewControllers = [dayStatisticsVC, addProductsVC]
+        viewControllers = [dayStatisticsNC, addProductsVC]
         
         loadAllControllers()
         
