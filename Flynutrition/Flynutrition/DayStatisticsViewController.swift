@@ -20,6 +20,8 @@ class DayStatisticsViewController: UIViewController {
     let dayTableView = UITableView()
     
     let recentlyAddedLabel = UILabel()
+    
+    let addProductButton = makeButton(color: .systemBlue)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,8 +46,12 @@ class DayStatisticsViewController: UIViewController {
         recentlyAddedLabel.text = "Recently added"
         recentlyAddedLabel.font = UIFont.systemFont(ofSize: 20)
         recentlyAddedLabel.textColor = .systemGray
-        
-        
+    
+        addProductButton.layer.cornerRadius = view.bounds.size.width / 16
+        let sizeConfig = UIImage.SymbolConfiguration(pointSize: 25, weight: .semibold, scale: .medium)
+        let configuredImage = UIImage(systemName: "plus", withConfiguration: sizeConfig)
+        addProductButton.setImage(configuredImage, for: .normal)
+        addProductButton.tintColor = .white
     }
     
     func layout() {
@@ -53,6 +59,7 @@ class DayStatisticsViewController: UIViewController {
         view.addSubview(dayProgressComponent)
         view.addSubview(recentlyAddedLabel)
         view.addSubview(dayTableView)
+        view.addSubview(addProductButton)
         
         
         NSLayoutConstraint.activate([
@@ -76,7 +83,14 @@ class DayStatisticsViewController: UIViewController {
             dayTableView.topAnchor.constraint(equalTo: dayProgressComponent.bottomAnchor, constant: 72),
             dayTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             dayTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            dayTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            dayTableView.bottomAnchor.constraint(equalTo: addProductButton.topAnchor, constant: -8)
+        ])
+        
+        NSLayoutConstraint.activate([
+            addProductButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            addProductButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            addProductButton.widthAnchor.constraint(equalToConstant: view.bounds.size.width / 8),
+            addProductButton.heightAnchor.constraint(equalToConstant: view.bounds.size.width / 8),
         ])
     }
     
@@ -115,7 +129,7 @@ extension DayStatisticsViewController: UITableViewDelegate {
 }
 extension DayStatisticsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return 10
     }
  
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

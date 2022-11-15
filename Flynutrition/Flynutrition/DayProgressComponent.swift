@@ -47,10 +47,10 @@ class DayProgressComponent: UIView {
 //
         waterProgressView = CircularProgressView(frame: CGRect(x: 0, y: 0, width: frameOfCircularProgressView.width, height: 120), lineWidth: 10, rounded: false)
         
-        caloriesProgressComponent = NutrientCircularProgressView(circularProgressView: calorieProgressView ,imageName: "flame.fill", unit: "kC", color: .systemOrange)
+        caloriesProgressComponent = NutrientCircularProgressView(circularProgressView: calorieProgressView ,imageName: "Vector.pdf", unit: "kC", color: .systemGreen)
         
         
-        waterProgressComponent = NutrientCircularProgressView(circularProgressView: waterProgressView,imageName: "drop.fill", unit: "ml", color: .systemBlue)
+        waterProgressComponent = NutrientCircularProgressView(circularProgressView: waterProgressView,imageName: "drop.pdf", unit: "ml", color: .systemBlue)
         
 
         

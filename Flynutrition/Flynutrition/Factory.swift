@@ -25,3 +25,15 @@ func makeStackView(axis: NSLayoutConstraint.Axis) -> UIStackView {
     
     return stackView
 }
+
+
+func makeButton(color: UIColor) -> UIButton {
+    let button = UIButton()
+    button.translatesAutoresizingMaskIntoConstraints = false
+    
+    button.tintColor = .white
+    
+    button.backgroundColor = color
+    
+    return button
+}

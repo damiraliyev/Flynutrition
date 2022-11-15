@@ -41,7 +41,7 @@ class NutrientCircularProgressView: UIView {
         nutritionProgressView.trackColor = .systemGray4
         
         
-        elementImageView.image = UIImage(systemName: imageName)
+        elementImageView.image = UIImage(named: imageName)
         elementRemainLabel.textColor = color
         elementImageView.tintColor = color
         nutritionProgressView.progressColor = color
@@ -95,7 +95,7 @@ class NutrientCircularProgressView: UIView {
         NSLayoutConstraint.activate([
             elementImageView.topAnchor.constraint(equalTo: nutritionProgressView.topAnchor, constant: nutritionProgressView.getLineWidth() * 2),
             elementImageView.centerXAnchor.constraint(equalTo: nutritionProgressView.leadingAnchor, constant: nutritionProgressView.center.x),
-            elementImageView.widthAnchor.constraint(equalToConstant: nutritionProgressView.bounds.size.width / 5),
+            elementImageView.widthAnchor.constraint(equalToConstant: nutritionProgressView.bounds.size.width / 5.5),
             elementImageView.heightAnchor.constraint(equalToConstant: nutritionProgressView.bounds.size.width / 5)
         ])
         
