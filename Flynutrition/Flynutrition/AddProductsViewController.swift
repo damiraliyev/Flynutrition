@@ -10,13 +10,30 @@ import UIKit
 
 class AddProductsViewController: UIViewController {
     
-    let searchController = UISearchController()
+    var searchController = UISearchController()
     
     let tableView = UITableView()
+    
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGray6
+        title = "Add products"
+
+        
+        searchController.delegate = self
+        searchController.searchBar.delegate = self
+        navigationController?.navigationItem.searchController = searchController
+        
+
+
         setup()
         layout()
     }
@@ -32,11 +49,14 @@ class AddProductsViewController: UIViewController {
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
-            
+            searchController.searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchController.searchBar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            searchController.searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchController.searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.topAnchor.constraint(equalTo: searchController.searchBar.bottomAnchor, constant: 8),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
@@ -54,6 +74,8 @@ class AddProductsViewController: UIViewController {
         tableView.rowHeight = 52
         
     }
+    
+
 }
 
 extension AddProductsViewController: UITableViewDelegate {
@@ -71,5 +93,25 @@ extension AddProductsViewController: UITableViewDataSource {
         return cell
     }
     
+    
+}
+
+extension AddProductsViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        
+    }
+    
+    
+}
+
+extension AddProductsViewController: UISearchControllerDelegate {
+    
+    
+    public func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        tableView.reloadData()
+    }
+}
+
+extension AddProductsViewController: UISearchBarDelegate {
     
 }

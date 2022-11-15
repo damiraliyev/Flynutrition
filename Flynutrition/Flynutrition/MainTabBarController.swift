@@ -10,6 +10,8 @@ import UIKit
 
 class MainTabBarController: UITabBarController {
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGray6
@@ -36,7 +38,7 @@ class MainTabBarController: UITabBarController {
 //        tabBarAppearance.backgroundColor = .systemBackground
 //        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
         
-        viewControllers = [dayStatisticsNC, addProductsVC]
+        viewControllers = [dayStatisticsNC]
         
         loadAllControllers()
         

@@ -32,6 +32,14 @@ class DayStatisticsViewController: UIViewController {
         layout()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = false
+    }
+    
+    
+    
+    
     
     func setup() {
         todayLabel.font = UIFont.systemFont(ofSize: 30, weight: .bold)
@@ -128,8 +136,8 @@ class DayStatisticsViewController: UIViewController {
     @objc func addProductPressed() {
         print("print")
         let addProductsViewController = AddProductsViewController()
-        addProductsViewController.modalPresentationStyle = .fullScreen
-        present(addProductsViewController, animated: true)
+        addProductsViewController.navigationController?.navigationItem.searchController = UISearchController()
+        navigationController?.pushViewController(addProductsViewController, animated: false)
     }
 }
 
