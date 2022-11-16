@@ -97,6 +97,14 @@ class AddProductCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func configureProductCell(product: Product) {
+        productNameLabel.text = product.name
+        calorieAmountLabel.text = String(product.calories)
+        amountLabel.text = String(product.amount) + product.measure.rawValue
+        
+    }
+
 }
 
 

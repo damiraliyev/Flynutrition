@@ -14,6 +14,18 @@ class AddProductsViewController: UIViewController {
     
     let tableView = UITableView()
     
+    let products = [Product(name: "Rice", amount: 120, calories: 423, proteins: 10, fats: 15, carbs: 50, measure: .g),
+                    Product(name: "Chocolate", amount: 100, calories: 500, proteins: 5, fats: 25, carbs: 62, measure: .g),
+                    Product(name: "Cheese", amount: 50, calories: 120, proteins: 15, fats: 15, carbs: 45, measure: .g),
+                    Product(name: "Milk", amount: 120, calories: 142, proteins: 8, fats: 10, carbs: 20, measure: .ml),
+                    Product(name: "Potato", amount: 150, calories: 400, proteins: 12, fats: 23, carbs: 65, measure: .g),
+                    Product(name: "Rice", amount: 120, calories: 423, proteins: 10, fats: 15, carbs: 50, measure: .g),
+                    Product(name: "Chocolate", amount: 100, calories: 500, proteins: 5, fats: 25, carbs: 62, measure: .g),
+                    Product(name: "Cheese", amount: 50, calories: 120, proteins: 15, fats: 15, carbs: 45, measure: .g),
+                    Product(name: "Milk", amount: 120, calories: 142, proteins: 8, fats: 10, carbs: 20, measure: .ml),
+                    Product(name: "Potato", amount: 150, calories: 400, proteins: 12, fats: 23, carbs: 65, measure: .g)
+    ]
+        
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -79,7 +91,10 @@ class AddProductsViewController: UIViewController {
 }
 
 extension AddProductsViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        navigationController?.pushViewController(ProductInfoViewController(), animated: false)
+        
+    }
 }
 
 extension AddProductsViewController: UITableViewDataSource {
@@ -89,7 +104,7 @@ extension AddProductsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: AddProductCell.reuseID, for: indexPath) as! AddProductCell
-        
+        cell.configureProductCell(product: products[indexPath.row])
         return cell
     }
     

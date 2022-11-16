@@ -87,5 +87,11 @@ class ConsumedProductCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func configureConsumedCell(consumedProduct: Product) {
+        productNameLabel.text = consumedProduct.name
+        amountLabel.text = String(consumedProduct.amount) + consumedProduct.measure.rawValue
+        calorieAmountLabel.text = String(consumedProduct.calories) + "kC"
+    }
 }
 
