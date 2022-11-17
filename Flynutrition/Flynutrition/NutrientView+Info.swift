@@ -15,6 +15,8 @@ class NutrientInfo: UIView {
     let nutrientNameLabel = UILabel()
     let amountLabel = UILabel()
     
+   
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -49,6 +51,8 @@ class NutrientInfo: UIView {
         amountLabel.translatesAutoresizingMaskIntoConstraints = false
         amountLabel.font = UIFont.systemFont(ofSize: 14)
         amountLabel.textColor = .orange
+        
+        
     }
     
     func layout() {
@@ -58,6 +62,7 @@ class NutrientInfo: UIView {
         stackView.addArrangedSubview(nutrientImageView)
         stackView.addArrangedSubview(nutrientNameLabel)
         stackView.addArrangedSubview(amountLabel)
+    
         
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: topAnchor),

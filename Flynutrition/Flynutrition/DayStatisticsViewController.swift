@@ -138,7 +138,7 @@ class DayStatisticsViewController: UIViewController {
         dayTableView.register(ConsumedProductCell.self, forCellReuseIdentifier: ConsumedProductCell.reuseID)
         dayTableView.backgroundColor = .clear
         dayTableView.layer.cornerRadius = 10
-        dayTableView.rowHeight = 55
+        dayTableView.rowHeight = 138
     }
     
     @objc func addProductPressed() {
@@ -150,6 +150,9 @@ class DayStatisticsViewController: UIViewController {
 }
 
 extension DayStatisticsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
     
 }
 extension DayStatisticsViewController: UITableViewDataSource {

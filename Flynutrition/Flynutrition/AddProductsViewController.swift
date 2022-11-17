@@ -93,6 +93,7 @@ class AddProductsViewController: UIViewController {
 extension AddProductsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         navigationController?.pushViewController(ProductInfoViewController(), animated: false)
+        tableView.deselectRow(at: indexPath, animated: true)
         
     }
 }

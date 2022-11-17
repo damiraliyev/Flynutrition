@@ -31,6 +31,8 @@ class ProductInfoViewController: UIViewController {
     let amountTextField = UITextField()
     let lineView = UIView()
     
+    let addButton = makeButton(color: .systemBlue)
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.prefersLargeTitles = false
@@ -83,6 +85,11 @@ class ProductInfoViewController: UIViewController {
         lineView.translatesAutoresizingMaskIntoConstraints = false
         lineView.backgroundColor = .systemGray
         
+        addButton.setTitle("Add", for: .normal)
+        addButton.titleLabel?.textColor = .white
+        addButton.layer.cornerRadius = 10
+        addButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        
     }
     
     func layout() {
@@ -98,6 +105,7 @@ class ProductInfoViewController: UIViewController {
         view.addSubview(massLabel)
         view.addSubview(amountTextField)
         view.addSubview(lineView)
+        view.addSubview(addButton)
         
         NSLayoutConstraint.activate([
             parentStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
@@ -121,6 +129,13 @@ class ProductInfoViewController: UIViewController {
             lineView.leadingAnchor.constraint(equalTo: amountTextField.leadingAnchor),
             lineView.trailingAnchor.constraint(equalTo: amountTextField.trailingAnchor),
             lineView.heightAnchor.constraint(equalToConstant: 1)
+        ])
+        
+        
+        NSLayoutConstraint.activate([
+            addButton.topAnchor.constraint(equalTo: lineView.bottomAnchor, constant: 24),
+            addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
     }
     
