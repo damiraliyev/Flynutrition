@@ -53,7 +53,7 @@ class NutrientCircularProgressView: UIView {
         
         nutritionProgressView.translatesAutoresizingMaskIntoConstraints = false
 
-        nutritionProgressView.progress = 0.5
+        nutritionProgressView.progress = 0.0
         
         elementImageView.translatesAutoresizingMaskIntoConstraints = false
        

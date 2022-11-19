@@ -19,8 +19,8 @@ class DayProgressComponent: UIView {
     let circularProgressStack = makeStackView(axis: .horizontal)
     
     let proteinsProgressBar = NutrientProgressBarView(nutrientName: "Proteins", requiredAmount: "130")
-    let carbsProgressBar = NutrientProgressBarView(nutrientName: "Fats", requiredAmount: "170")
-    let fatsProgressBar = NutrientProgressBarView(nutrientName: "Carbs", requiredAmount: "200")
+    let fatsProgressBar = NutrientProgressBarView(nutrientName: "Fats", requiredAmount: "170")
+    let carbsProgressBar = NutrientProgressBarView(nutrientName: "Carbs", requiredAmount: "200")
     
     let nutrientsStack = makeStackView(axis: .horizontal)
     
@@ -71,9 +71,9 @@ class DayProgressComponent: UIView {
         
         proteinsProgressBar.translatesAutoresizingMaskIntoConstraints = false
         
-        carbsProgressBar.translatesAutoresizingMaskIntoConstraints = false
-        
         fatsProgressBar.translatesAutoresizingMaskIntoConstraints = false
+        
+        carbsProgressBar.translatesAutoresizingMaskIntoConstraints = false
         
         
         print(caloriesProgressComponent.bounds.size.width)
@@ -91,8 +91,8 @@ class DayProgressComponent: UIView {
         
         addSubview(nutrientsStack)
         nutrientsStack.addArrangedSubview(proteinsProgressBar)
-        nutrientsStack.addArrangedSubview(carbsProgressBar)
         nutrientsStack.addArrangedSubview(fatsProgressBar)
+        nutrientsStack.addArrangedSubview(carbsProgressBar)
     
         NSLayoutConstraint.activate([
             circularProgressStack.topAnchor.constraint(equalTo: topAnchor, constant: 8),
