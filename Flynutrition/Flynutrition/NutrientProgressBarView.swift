@@ -60,7 +60,7 @@ class NutrientProgressBarView: UIView {
         requiredAmountLabel.font = UIFont.systemFont(ofSize: 8)
         
         combinedAmountLabel.translatesAutoresizingMaskIntoConstraints = false
-        combinedAmountLabel.text = consumedAmountLabel.text ?? "0" + "/" + requiredAmountLabel.text!
+        combinedAmountLabel.text = consumedAmountLabel.text ?? "0" + "/" + requiredAmountLabel.text! + "g"
         combinedAmountLabel.textColor = .systemOrange
         combinedAmountLabel.textAlignment = .center
     }

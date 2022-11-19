@@ -8,6 +8,10 @@
 import Foundation
 import UIKit
 
+protocol AddProductDelegate {
+    func addPressed()
+}
+
 class AddProductCell: UITableViewCell {
     static let reuseID = "addProductCell"
     
@@ -16,6 +20,14 @@ class AddProductCell: UITableViewCell {
     let calorieImageView = UIImageView()
     let calorieAmountLabel = UILabel()
     let addButton = UIButton()
+    
+    var proteins: Float = 0.0
+    var fats: Float = 0.0
+    var carbs: Float = 0.0
+    
+    var completionHandler: ((Product) -> Void)?
+    
+    var addProductDelegate: AddProductDelegate?
         
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -26,11 +38,11 @@ class AddProductCell: UITableViewCell {
     
     func setup() {
         productNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        productNameLabel.text = "Rice"
+//        productNameLabel.text = "Rice"
         productNameLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
         amountLabel.translatesAutoresizingMaskIntoConstraints = false
-        amountLabel.text = "120g"
+//        amountLabel.text = "120g"
         amountLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
         calorieImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -38,7 +50,7 @@ class AddProductCell: UITableViewCell {
         calorieImageView.tintColor = .systemGreen
         
         calorieAmountLabel.translatesAutoresizingMaskIntoConstraints = false
-        calorieAmountLabel.text = "120kC"
+//        calorieAmountLabel.text = "120kC"
         calorieAmountLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         calorieAmountLabel.textColor = .systemGreen
         
@@ -49,6 +61,8 @@ class AddProductCell: UITableViewCell {
         let configuredImage = UIImage(systemName: "plus", withConfiguration: sizeConfig)
         addButton.setImage(configuredImage, for: .normal)
         addButton.tintColor = .white
+        
+        addButton.addTarget(self, action: #selector(addPressed), for: .primaryActionTriggered)
         
     
 //        addButton.titleLabel?.font = UIFont.systemFont(ofSize: 30)
@@ -100,9 +114,33 @@ class AddProductCell: UITableViewCell {
     
     func configureProductCell(product: Product) {
         productNameLabel.text = product.name
-        calorieAmountLabel.text = String(product.calories)
+        calorieAmountLabel.text = String(product.calories) + "kC"
         amountLabel.text = String(product.amount) + product.measure.rawValue
+        proteins = product.proteins
+        fats = product.fats
+        carbs = product.carbs
+        print(proteins)
         
+    }
+    
+    @objc func addPressed() {
+        guard let productName = productNameLabel.text else { return }
+        guard let amount = amountLabel.text?.dropLast() else { return }
+        guard let calorieAmount = calorieAmountLabel.text?.dropLast(2) else { return }
+        
+        let productInfo = ["name": productName ,"amount": Int(amount) ?? 0, "calories": Int(calorieAmount) ?? 0, "proteins": proteins, "fats": fats, "carbs": carbs
+                               
+        ] as [String : Any]
+        
+        NotificationCenter.default.post(name: Notification.Name("AddProduct"), object: nil, userInfo: productInfo)
+        
+//        addProductDelegate?.addPressed()
+//        guard let productName = productNameLabel.text else { return }
+//        guard let amount = amountLabel.text else { return }
+//        guard let calorieAmout = calorieAmountLabel.text else { return }
+//        let product = Product(name: productName, amount: Int(amount) ?? 0, calories: Int(calorieAmout) ?? 0, proteins: proteins, fats: fats, carbs: carbs, measure: .g)
+//        print("Clicked")
+//        completionHandler?(product)
     }
 
 }

@@ -16,12 +16,12 @@ class ProductInfoViewController: UIViewController {
     
     let calorieAmountLabel = UILabel()
     
-    let productName = String()
+    var productName = String()
     
     let nutrientsStack = makeStackView(axis: .horizontal)
-    let proteins = NutrientInfo(name: "Proteins", amount: 20)
-    let fats = NutrientInfo(name: "Fats", amount: 18)
-    let carbs = NutrientInfo(name: "Carbs", amount: 50)
+    let proteins = NutrientInfo(name: "Proteins", amount: 20, imageName: "Proteins.pdf")
+    let fats = NutrientInfo(name: "Fats", amount: 18, imageName: "Fats.pdf")
+    let carbs = NutrientInfo(name: "Carbs", amount: 50, imageName: "Carbs.pdf")
     
     
     let massLabel = UILabel()
@@ -43,7 +43,7 @@ class ProductInfoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Rice"
+        title = productName
         
         view.backgroundColor = .systemGray6
         setup()
@@ -73,7 +73,7 @@ class ProductInfoViewController: UIViewController {
         massLabel.text = "Mass"
         
         
-        measure = "g"
+//        measure = "g"
         
         massLabel.text = massLabel.text! + "(\(measure))"
         
@@ -151,7 +151,7 @@ class ProductInfoViewController: UIViewController {
     }
     
     func setCalorieLabel() {
-        calorieAmountLabel.text = "250kC"
+//        calorieAmountLabel.text = "250kC"
         calorieAmountLabel.textColor = .systemGreen
         calorieAmountLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         // create an NSMutableAttributedString that we'll append everything to
@@ -171,5 +171,15 @@ class ProductInfoViewController: UIViewController {
 
         calorieAmountLabel.attributedText = fullString
         
+    }
+    
+    func configureProductInfo(product: Product) {
+       productName = product.name
+       amountTextField.text = String(product.amount)
+        calorieAmountLabel.text = String(product.calories) + product.measure.rawValue
+        proteins.amountLabel.text = String(product.proteins) + "г"
+        fats.amountLabel.text = String(product.fats) + "г"
+        carbs.amountLabel.text = String(product.carbs) + "г"
+        measure = product.measure.rawValue
     }
 }

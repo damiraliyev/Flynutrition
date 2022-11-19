@@ -23,12 +23,11 @@ class DayStatisticsViewController: UIViewController {
     
     let addProductButton = makeButton(color: .systemBlue)
     
-    let consumedProducts = [Product(name: "Rice", amount: 120, calories: 423, proteins: 10, fats: 15, carbs: 50, measure: .g),
+    var consumedProducts = [Product(name: "Rice", amount: 100, calories: 130, proteins: 2.7, fats: 0.3, carbs: 28, measure: .g),
                             Product(name: "Chocolate", amount: 100, calories: 500, proteins: 5, fats: 25, carbs: 62, measure: .g),
                             Product(name: "Cheese", amount: 50, calories: 120, proteins: 15, fats: 15, carbs: 45, measure: .g),
                             Product(name: "Milk", amount: 120, calories: 142, proteins: 8, fats: 10, carbs: 20, measure: .ml),
                             Product(name: "Potato", amount: 150, calories: 400, proteins: 12, fats: 23, carbs: 65, measure: .g)
-    
     ]
 
     override func viewDidLoad() {
@@ -38,6 +37,7 @@ class DayStatisticsViewController: UIViewController {
         title = "Today"
         setup()
         layout()
+        registerForNotifications()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -78,12 +78,6 @@ class DayStatisticsViewController: UIViewController {
         view.addSubview(recentlyAddedLabel)
         view.addSubview(dayTableView)
         view.addSubview(addProductButton)
-        
-        
-//        NSLayoutConstraint.activate([
-//            todayLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 25),
-//            todayLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-//        ])
         
         
         NSLayoutConstraint.activate([
@@ -147,10 +141,32 @@ class DayStatisticsViewController: UIViewController {
         addProductsViewController.navigationController?.navigationItem.searchController = UISearchController()
         navigationController?.pushViewController(addProductsViewController, animated: false)
     }
+    
+    func registerForNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(productAdded), name: NSNotification.Name("AddProduct"), object: nil)
+    }
+    
+    @objc func productAdded(_ notification: Notification) {
+//        "name": productName ,"amount": amount, "calories": calorieAmount, "proteins": proteins, "fats": fats,
+//                           "carbs": carbs
+//        let productInfo = notification.userInfo!["product"]
+        let name = notification.userInfo?["name"] as! String
+        let amount = notification.userInfo?["amount"] as? Int
+        let calories = notification.userInfo?["calories"] as? Int
+        let proteins = notification.userInfo?["proteins"] as! Float
+        let fats = notification.userInfo?["fats"] as! Float
+        let carbs = notification.userInfo?["carbs"] as! Float
+
+        
+        let newConsumedProduct = Product(name: name, amount: amount ?? 0, calories: calories ?? 0, proteins: proteins, fats: fats, carbs: carbs, measure: .g)
+        consumedProducts.append(newConsumedProduct)
+        dayTableView.reloadData()
+    }
 }
 
 extension DayStatisticsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

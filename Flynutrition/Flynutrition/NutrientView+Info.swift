@@ -13,7 +13,7 @@ class NutrientInfo: UIView {
     
     let nutrientImageView = UIImageView()
     let nutrientNameLabel = UILabel()
-    let amountLabel = UILabel()
+    var amountLabel = UILabel()
     
    
     
@@ -23,11 +23,11 @@ class NutrientInfo: UIView {
         layout()
     }
     
-    init(name: String, amount: Float) {
+    init(name: String, amount: Float, imageName: String) {
         super.init(frame: .zero)
         setup()
         
-        nutrientImageView.image = UIImage(named: name)
+        nutrientImageView.image = UIImage(named: imageName)
         
         nutrientNameLabel.text = name
         

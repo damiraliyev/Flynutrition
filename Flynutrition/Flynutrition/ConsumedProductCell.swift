@@ -21,9 +21,9 @@ class ConsumedProductCell: UITableViewCell {
     
     
     let consumedNutrientStack = makeStackView(axis: .horizontal)
-    let proteinsView = NutrientInfo(name: "Proteins", amount: 22)
-    let fatsView = NutrientInfo(name: "Fats", amount: 15)
-    let carbsView = NutrientInfo(name: "Carbs", amount: 45)
+    let proteinsView = NutrientInfo(name: "Proteins", amount: 22, imageName: "Proteins.pdf")
+    let fatsView = NutrientInfo(name: "Fats", amount: 15, imageName: "Fats.pdf")
+    let carbsView = NutrientInfo(name: "Carbs", amount: 45, imageName: "Carbs.pdf")
         
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -92,7 +92,7 @@ class ConsumedProductCell: UITableViewCell {
         ])
         
         NSLayoutConstraint.activate([
-            calorieImageView.trailingAnchor.constraint(equalTo: calorieAmountLabel.leadingAnchor, constant: -16),
+            calorieImageView.trailingAnchor.constraint(equalTo: calorieAmountLabel.leadingAnchor, constant: -8),
             calorieImageView.centerYAnchor.constraint(equalTo: productNameLabel.centerYAnchor),
             calorieImageView.widthAnchor.constraint(equalToConstant: 25),
             calorieImageView.heightAnchor.constraint(equalToConstant: 25)
@@ -107,7 +107,7 @@ class ConsumedProductCell: UITableViewCell {
             consumedNutrientStack.topAnchor.constraint(equalTo: productNameLabel.bottomAnchor, constant: 16),
             consumedNutrientStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             consumedNutrientStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            consumedNutrientStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8)
+            consumedNutrientStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
         ])
         
 //        NSLayoutConstraint.activate([
@@ -130,6 +130,9 @@ class ConsumedProductCell: UITableViewCell {
         productNameLabel.text = consumedProduct.name
         amountLabel.text = String(consumedProduct.amount) + consumedProduct.measure.rawValue
         calorieAmountLabel.text = String(consumedProduct.calories) + "kC"
+        proteinsView.amountLabel.text = String(consumedProduct.proteins) + "g"
+        fatsView.amountLabel.text = String(consumedProduct.fats) + "g"
+        carbsView.amountLabel.text = String(consumedProduct.carbs) + "g"
     }
 }
 

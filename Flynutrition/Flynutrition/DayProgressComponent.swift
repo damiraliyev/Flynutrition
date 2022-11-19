@@ -102,7 +102,7 @@ class DayProgressComponent: UIView {
         
         
         NSLayoutConstraint.activate([
-            nutrientsStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+            nutrientsStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12),
             nutrientsStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             nutrientsStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8)
         ])
