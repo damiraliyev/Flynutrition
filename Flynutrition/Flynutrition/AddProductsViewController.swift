@@ -42,7 +42,7 @@ class AddProductsViewController: UIViewController {
         
         searchController.delegate = self
         searchController.searchBar.delegate = self
-        navigationController?.navigationItem.searchController = searchController
+//        navigationController?.navigationItem.searchController = searchController
         
 
 
@@ -62,7 +62,7 @@ class AddProductsViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             searchController.searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            searchController.searchBar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//            searchController.searchBar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             searchController.searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchController.searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])

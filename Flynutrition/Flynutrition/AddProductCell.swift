@@ -24,6 +24,7 @@ class AddProductCell: UITableViewCell {
     var proteins: Float = 0.0
     var fats: Float = 0.0
     var carbs: Float = 0.0
+    var measurement: Measure = .g
     
     var completionHandler: ((Product) -> Void)?
     
@@ -119,6 +120,7 @@ class AddProductCell: UITableViewCell {
         proteins = product.proteins
         fats = product.fats
         carbs = product.carbs
+        measurement = product.measure
         print(proteins)
         
     }
@@ -132,10 +134,18 @@ class AddProductCell: UITableViewCell {
         }
         
         guard let productName = productNameLabel.text else { return }
-        guard let amount = amountLabel.text?.dropLast() else { return }
+        guard var amount = amountLabel.text?.dropLast() else { return }
+        
+       
+        //for g we need to drop one character, for ml 2 characters
+        if amount.last == "m" {
+            amount = amount.dropLast()
+        }
+        
         guard let calorieAmount = calorieAmountLabel.text?.dropLast(2) else { return }
         
-        let productInfo = ["name": productName ,"amount": Int(amount) ?? 0, "calories": Int(calorieAmount) ?? 0, "proteins": proteins, "fats": fats, "carbs": carbs
+        
+        let productInfo = ["name": productName ,"amount": Int(amount) ?? 0, "calories": Int(calorieAmount) ?? 0, "proteins": proteins, "fats": fats, "carbs": carbs, "measure": measurement
                                
         ] as [String : Any]
         

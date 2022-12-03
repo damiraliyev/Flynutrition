@@ -32,6 +32,12 @@ class DayStatisticsViewController: UIViewController {
     var dailyProteinRate = 105
     var dailyFatsRate = 56
     var dailyCarbsRate = 140
+    
+    //Max for progress bar is 1, but the sum of all products can be more than this
+    //Problem will occur when we will start to delete products
+    var progressBarProteinTracker: Float = 0
+    var progressBarFatsTracker: Float = 0
+    var progressBarCarbsTracker: Float = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -166,10 +172,10 @@ class DayStatisticsViewController: UIViewController {
         let proteins = notification.userInfo?["proteins"] as! Float
         let fats = notification.userInfo?["fats"] as! Float
         let carbs = notification.userInfo?["carbs"] as! Float
-
+        let measure = notification.userInfo?["measure"] as! Measure
         
-        let newConsumedProduct = Product(name: name, amount: amount ?? 0, calories: calories ?? 0, proteins: proteins, fats: fats, carbs: carbs, measure: .g)
-        consumedProducts.append(newConsumedProduct)
+        let newConsumedProduct = Product(name: name, amount: amount ?? 0, calories: calories ?? 0, proteins: proteins, fats: fats, carbs: carbs, measure: measure)
+        consumedProducts.insert(newConsumedProduct, at: 0)
         dayTableView.reloadData()
         
         changeCaloriesProgress(newProduct: newConsumedProduct)
@@ -201,36 +207,32 @@ class DayStatisticsViewController: UIViewController {
     }
     
     func calculateRemainedProteins(newProduct: Product) {
-        dayProgressComponent.proteinsProgressBar.progressBar.progress +=  newProduct.proteins / Float(dailyProteinRate)
+        dayProgressComponent.proteinsProgressBar.progressBar.progress += round(newProduct.proteins / Float(dailyProteinRate) * 10000) / 10000
         
-        let consumedProteinAmount = Float(dayProgressComponent.proteinsProgressBar.consumedAmountLabel.text ?? "0") ?? 0.0
+        progressBarProteinTracker += round(newProduct.proteins / Float(dailyProteinRate) * 10000) / 10000
         
-        let newProteinsValue = String(format: "%.1f", consumedProteinAmount + newProduct.proteins)
-
-        dayProgressComponent.proteinsProgressBar.consumedAmountLabel.text = newProteinsValue
-        dayProgressComponent.proteinsProgressBar.combinedAmountLabel.text = newProteinsValue + "/" + String(dailyProteinRate) + "g"
+        print("After adding", dayProgressComponent.proteinsProgressBar.progressBar.progress)
+        print(newProduct.proteins / Float(dailyProteinRate))
+        
+        recalculateProteins(currentProduct: newProduct, operation: "+")
     }
     
     func calculateRemainedFats(newProduct: Product) {
-        dayProgressComponent.fatsProgressBar.progressBar.progress +=  newProduct.fats / Float(dailyFatsRate)
+        dayProgressComponent.fatsProgressBar.progressBar.progress += round(newProduct.fats / Float(dailyFatsRate) * 10000) / 10000
+        
+        progressBarFatsTracker += round(newProduct.fats / Float(dailyFatsRate) * 10000) / 10000
+        
         print(newProduct.fats, "AAA")
-        let consumedFatsAmount = Float(dayProgressComponent.carbsProgressBar.consumedAmountLabel.text ?? "0") ?? 0.0
-        print(consumedFatsAmount)
-        let newFatsValue = String(format: "%.1f", consumedFatsAmount + newProduct.fats)
-
-        dayProgressComponent.fatsProgressBar.consumedAmountLabel.text = newFatsValue
-        dayProgressComponent.fatsProgressBar.combinedAmountLabel.text = newFatsValue + "/" + String(dailyFatsRate) + "g"
+       
+        recalculateFats(currentProduct: newProduct, operation: "+")
     }
     
     func calculateRemainedCarbs(newProduct: Product) {
-        dayProgressComponent.carbsProgressBar.progressBar.progress +=  newProduct.carbs / Float(dailyCarbsRate)
+        dayProgressComponent.carbsProgressBar.progressBar.progress += round(newProduct.carbs / Float(dailyCarbsRate) * 10000) / 10000
         
-        let consumedCarbsAmount = Float(dayProgressComponent.fatsProgressBar.consumedAmountLabel.text ?? "0") ?? 0.0
+        progressBarCarbsTracker += round(newProduct.carbs / Float(dailyCarbsRate) * 10000) / 10000
         
-        let newCarbsValue = String(format: "%.1f", consumedCarbsAmount + newProduct.carbs)
-
-        dayProgressComponent.carbsProgressBar.consumedAmountLabel.text = newCarbsValue
-        dayProgressComponent.carbsProgressBar.combinedAmountLabel.text = newCarbsValue + "/" + String(dailyCarbsRate) + "g"
+        recalculateCarbs(currentProduct: newProduct, operation: "+")
     }
 }
 
@@ -247,7 +249,15 @@ extension DayStatisticsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let currentProduct = consumedProducts[indexPath.row]
+            print(Float(currentProduct.calories))
+            print(Float(dailyRateCalories))
+           
+//            recalculateProgressAfterDeleting(currentProduct: currentProduct)
             dayProgressComponent.calorieProgressView.progress -= Float(currentProduct.calories) / Float(dailyRateCalories)
+            
+           recalculateProgressAfterDeleting(currentProduct: currentProduct)
+            
+           
             guard let remainText = dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text else { return }
             
             let remainAmountCalorie = (Int(remainText) ?? 0) + currentProduct.calories
@@ -267,6 +277,93 @@ extension DayStatisticsViewController: UITableViewDelegate {
             
         }
     }
+    
+    func recalculateProgressAfterDeleting(currentProduct: Product) {
+        progressBarProteinTracker -= round(Float(currentProduct.proteins) / Float(dailyProteinRate) * 10000) / 10000
+        recalculateProteins(currentProduct: currentProduct, operation: "-")
+        if progressBarProteinTracker <= 1 && consumedProducts.count > 1{
+            dayProgressComponent.proteinsProgressBar.progressBar.progress -= round(Float(currentProduct.proteins) / Float(dailyProteinRate) * 10000) / 10000
+            
+        } else if progressBarProteinTracker < 0 || consumedProducts.count == 1 {
+            progressBarProteinTracker = 0
+            dayProgressComponent.proteinsProgressBar.progressBar.progress = 0
+        }
+        
+        progressBarFatsTracker -= round(Float(currentProduct.fats) / Float(dailyFatsRate) * 10000) / 10000
+        recalculateFats(currentProduct: currentProduct, operation: "-")
+        if progressBarFatsTracker <= 1 && consumedProducts.count > 1{
+            dayProgressComponent.fatsProgressBar.progressBar.progress -= round(Float(currentProduct.fats) / Float(dailyFatsRate) * 10000) / 10000
+            print("CONSUMED PRODUCTS COUNT", consumedProducts.count)
+        } else if progressBarFatsTracker < 0 || consumedProducts.count == 1 {
+            progressBarFatsTracker = 0
+            dayProgressComponent.fatsProgressBar.progressBar.progress = 0
+            print(progressBarFatsTracker)
+        }
+        
+
+        progressBarCarbsTracker -= round(Float(currentProduct.carbs) / Float(dailyCarbsRate) * 10000) / 10000
+        recalculateCarbs(currentProduct: currentProduct, operation: "-")
+        if progressBarCarbsTracker <= 1 && consumedProducts.count > 1{
+            dayProgressComponent.carbsProgressBar.progressBar.progress -= round(Float(currentProduct.carbs) / Float(dailyCarbsRate) * 10000) / 10000
+        } else if progressBarCarbsTracker < 0 || consumedProducts.count == 1 {
+            progressBarCarbsTracker = 0
+            dayProgressComponent.carbsProgressBar.progressBar.progress = 0
+            print("HEREEEeeeee")
+        }
+        
+    }
+    
+    func recalculateProteins(currentProduct: Product, operation: String) {
+        //Calculate proteins after adding or deleting
+        let consumedProteinAmount = Float(dayProgressComponent.proteinsProgressBar.consumedAmountLabel.text ?? "0") ?? 0.0
+        var newProteinsValue = ""
+        
+        if operation == "+" {
+            newProteinsValue = String(format: "%.1f", consumedProteinAmount + currentProduct.proteins)
+        } else {
+            newProteinsValue = String(format: "%.1f", consumedProteinAmount - currentProduct.proteins)
+        }
+        
+
+        dayProgressComponent.proteinsProgressBar.consumedAmountLabel.text = newProteinsValue
+        dayProgressComponent.proteinsProgressBar.combinedAmountLabel.text = newProteinsValue + "/" + String(dailyProteinRate) + "g"
+    }
+    
+    
+    func recalculateFats(currentProduct: Product, operation: String) {
+        //Calculate proteins after adding or deleting
+        let consumedFatsAmount = Float(dayProgressComponent.fatsProgressBar.consumedAmountLabel.text ?? "0") ?? 0.0
+        var newFatsValue = ""
+        
+        if operation == "+" {
+            newFatsValue = String(format: "%.1f", consumedFatsAmount + currentProduct.fats)
+        } else {
+            newFatsValue = String(format: "%.1f", consumedFatsAmount - currentProduct.fats)
+        }
+        
+
+        dayProgressComponent.fatsProgressBar.consumedAmountLabel.text = newFatsValue
+        dayProgressComponent.fatsProgressBar.combinedAmountLabel.text = newFatsValue + "/" + String(dailyFatsRate) + "g"
+    }
+    
+    
+    func recalculateCarbs(currentProduct: Product, operation: String) {
+        //Calculate proteins after adding or deleting
+        let consumedCarbsAmount = Float(dayProgressComponent.carbsProgressBar.consumedAmountLabel.text ?? "0") ?? 0.0
+        var newCarbsValue = ""
+        
+        if operation == "+" {
+            newCarbsValue = String(format: "%.1f", consumedCarbsAmount + currentProduct.carbs)
+        } else {
+            newCarbsValue = String(format: "%.1f", consumedCarbsAmount - currentProduct.carbs)
+        }
+        
+
+        dayProgressComponent.carbsProgressBar.consumedAmountLabel.text = newCarbsValue
+        print(dayProgressComponent.carbsProgressBar.consumedAmountLabel.text)
+        dayProgressComponent.carbsProgressBar.combinedAmountLabel.text = newCarbsValue + "/" + String(dailyCarbsRate) + "g"
+    }
+    
     
 }
 extension DayStatisticsViewController: UITableViewDataSource {
