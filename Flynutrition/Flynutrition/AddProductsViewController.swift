@@ -12,6 +12,8 @@ class AddProductsViewController: UIViewController {
     
     var searchController = UISearchController()
     
+    let searchBar = UISearchBar()
+    
     let tableView = UITableView()
     
     let products = [Product(name: "Rice", amount: 100, calories: 130, proteins: 2.7, fats: 0.3, carbs: 28, measure: .g),
@@ -38,37 +40,23 @@ class AddProductsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemGray6
         title = "Add products"
-
-        
-        searchController.delegate = self
-        searchController.searchBar.delegate = self
-//        navigationController?.navigationItem.searchController = searchController
-        
-
-
         setup()
         layout()
     }
     
     func setup() {
-        searchController.searchBar.translatesAutoresizingMaskIntoConstraints = false
-        
+        self.navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+
         setupTableView()
     }
     
     func layout() {
-        view.addSubview(searchController.searchBar)
+
         view.addSubview(tableView)
-        
+
         NSLayoutConstraint.activate([
-            searchController.searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-//            searchController.searchBar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            searchController.searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            searchController.searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-        
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: searchController.searchBar.bottomAnchor, constant: 8),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)

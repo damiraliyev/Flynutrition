@@ -25,13 +25,18 @@ class ProductInfoViewController: UIViewController {
     
     
     let massLabel = UILabel()
-    var measure = String()
+    var measure: Measure = .g
     
     
     let amountTextField = UITextField()
     let lineView = UIView()
     
     let addButton = makeButton(color: .systemBlue)
+    
+    
+    var proteinsAmount: Float = 0
+    var fatsAmount: Float = 0
+    var carbsAmount: Float = 0
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -75,7 +80,7 @@ class ProductInfoViewController: UIViewController {
         
 //        measure = "g"
         
-        massLabel.text = massLabel.text! + "(\(measure))"
+        massLabel.text = massLabel.text! + "(\(measure.rawValue))"
         
         
         amountTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -89,6 +94,7 @@ class ProductInfoViewController: UIViewController {
         addButton.titleLabel?.textColor = .white
         addButton.layer.cornerRadius = 10
         addButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        addButton.addTarget(self, action: #selector(addWithChangedValue), for: .primaryActionTriggered)
         
     }
     
@@ -176,10 +182,33 @@ class ProductInfoViewController: UIViewController {
     func configureProductInfo(product: Product) {
        productName = product.name
        amountTextField.text = String(product.amount)
-        calorieAmountLabel.text = String(product.calories) + product.measure.rawValue
-        proteins.amountLabel.text = String(product.proteins) + "г"
-        fats.amountLabel.text = String(product.fats) + "г"
-        carbs.amountLabel.text = String(product.carbs) + "г"
-        measure = product.measure.rawValue
+        calorieAmountLabel.text = String(product.calories) + "kC"
+        proteins.amountLabel.text = String(product.proteins) + "g"
+        fats.amountLabel.text = String(product.fats) + "g"
+        carbs.amountLabel.text = String(product.carbs) + "g"
+        measure = product.measure
+        
+        proteinsAmount = product.proteins
+        fatsAmount = product.fats
+        carbsAmount = product.carbs
+    }
+    
+    
+    @objc func addWithChangedValue(_ sender: UIButton) {
+        sender.alpha = 0.3
+        
+        UIView.animate(withDuration: 0.5, delay: 0) {
+            sender.alpha = 1
+        }
+        
+
+        let productCalorieWithoutMeasure = String(calorieAmountLabel.text?.replacingOccurrences(of: " ", with: "").dropLast(2)  ?? "")
+        print("WITHOUT MEASURE +\(productCalorieWithoutMeasure)+")
+        print(Int("130"))
+        let productInfo = ["name": productName ,"amount": Int(amountTextField.text!) ?? 100, "calories": Int(productCalorieWithoutMeasure) ?? 0, "proteins": proteinsAmount, "fats": fatsAmount, "carbs": carbsAmount, "measure": measure
+                               
+        ] as [String : Any]
+        
+        NotificationCenter.default.post(name: Notification.Name("AddProduct"), object: nil, userInfo: productInfo)
     }
 }
