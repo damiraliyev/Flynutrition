@@ -48,7 +48,6 @@ class MainTabBarController: UITabBarController {
         if let viewControllers = self.viewControllers {
             for viewController in viewControllers {
                 if let navVC = viewController as? UINavigationController {
-                    print("true")
                     let _ = navVC.viewControllers.first?.view
                 }
                

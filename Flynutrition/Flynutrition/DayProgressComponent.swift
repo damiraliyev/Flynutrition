@@ -74,10 +74,7 @@ class DayProgressComponent: UIView {
         fatsProgressBar.translatesAutoresizingMaskIntoConstraints = false
         
         carbsProgressBar.translatesAutoresizingMaskIntoConstraints = false
-        
-        
-        print(caloriesProgressComponent.bounds.size.width)
-                
+
     }
     
     

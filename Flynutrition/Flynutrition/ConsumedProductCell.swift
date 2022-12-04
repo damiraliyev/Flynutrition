@@ -129,7 +129,6 @@ class ConsumedProductCell: UITableViewCell {
     func configureConsumedCell(consumedProduct: Product) {
         productNameLabel.text = consumedProduct.name
         amountLabel.text = String(consumedProduct.amount) + consumedProduct.measure.rawValue
-        print("MEASURE", consumedProduct.measure.rawValue)
         calorieAmountLabel.text = String(consumedProduct.calories) + "kC"
         proteinsView.amountLabel.text = String(consumedProduct.proteins) + "g"
         fatsView.amountLabel.text = String(consumedProduct.fats) + "g"

@@ -157,7 +157,6 @@ class DayStatisticsViewController: UIViewController {
     }
     
     @objc func addProductPressed() {
-        print("print")
         let addProductsViewController = AddProductsViewController()
         addProductsViewController.navigationController?.navigationItem.searchController = UISearchController()
         navigationController?.pushViewController(addProductsViewController, animated: false)
@@ -233,10 +232,7 @@ class DayStatisticsViewController: UIViewController {
         dayProgressComponent.proteinsProgressBar.progressBar.progress += round(newProduct.proteins / Float(dailyProteinRate) * 10000) / 10000
         
         progressBarProteinTracker += round(newProduct.proteins / Float(dailyProteinRate) * 10000) / 10000
-        
-        print("After adding", dayProgressComponent.proteinsProgressBar.progressBar.progress)
-        print(newProduct.proteins / Float(dailyProteinRate))
-        
+  
         recalculateNutrients(currentProduct: newProduct, operation: .add, nutrient: .proteins)
     }
     
@@ -271,8 +267,6 @@ extension DayStatisticsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let currentProduct = consumedProducts[indexPath.row]
-            print(Float(currentProduct.calories))
-            print(Float(dailyRateCalories))
            
             dayProgressComponent.calorieProgressView.progress -= Float(currentProduct.calories) / Float(dailyRateCalories)
             
@@ -338,7 +332,6 @@ extension DayStatisticsViewController: UITableViewDelegate {
         } else if progressBarCarbsTracker < 0 || consumedProducts.count == 1 {
             progressBarCarbsTracker = 0
             dayProgressComponent.carbsProgressBar.progressBar.progress = 0
-            print("HEREEEeeeee")
         }
         
     }

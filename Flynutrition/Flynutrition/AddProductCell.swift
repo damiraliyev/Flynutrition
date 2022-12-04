@@ -120,9 +120,7 @@ class AddProductCell: UITableViewCell {
         proteins = product.proteins
         fats = product.fats
         carbs = product.carbs
-        measurement = product.measure
-        print(proteins)
-        
+        measurement = product.measure        
     }
     
     @objc func addPressed(sender: UIButton) {

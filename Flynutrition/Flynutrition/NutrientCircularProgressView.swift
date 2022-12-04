@@ -81,9 +81,7 @@ class NutrientCircularProgressView: UIView {
 
         
         addSubview(left1)
-        
-        print(nutritionProgressView.getLineWidth(), "line width")
-        
+
         //CaloriesProgressView layout
         NSLayoutConstraint.activate([
 
