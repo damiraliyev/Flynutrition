@@ -240,6 +240,8 @@ class ProductInfoViewController: UIViewController {
         ] as [String : Any]
         
         NotificationCenter.default.post(name: Notification.Name("AddProduct"), object: nil, userInfo: productInfo)
+        
+        self.navigationController?.popToRootViewController(animated: true)
     }
 }
 

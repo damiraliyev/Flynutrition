@@ -29,6 +29,7 @@ class DayStatisticsViewController: UIViewController {
     ]
     
     var dailyRateCalories = 2000
+    var dailyWaterRate = 2000
     var dailyProteinRate = 105
     var dailyFatsRate = 56
     var dailyCarbsRate = 140
@@ -38,6 +39,18 @@ class DayStatisticsViewController: UIViewController {
     var progressBarProteinTracker: Float = 0
     var progressBarFatsTracker: Float = 0
     var progressBarCarbsTracker: Float = 0
+    
+    
+    enum Nutrients {
+        case proteins
+        case fats
+        case carbs
+    }
+    
+    enum Operations {
+        case add
+        case delete
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,12 +68,8 @@ class DayStatisticsViewController: UIViewController {
     }
     
     
-    
-    
-    
     func setup() {
         todayLabel.font = UIFont.systemFont(ofSize: 30, weight: .bold)
-//        todayLabel.attributedText = NSAttributedString(string: todayLabel.text!, attributes: [.kern: 1])
         
         setProgressViews()
         
@@ -82,7 +91,6 @@ class DayStatisticsViewController: UIViewController {
     }
     
     func layout() {
-//        view.addSubview(todayLabel)
         view.addSubview(dayProgressComponent)
         view.addSubview(recentlyAddedLabel)
         view.addSubview(dayTableView)
@@ -134,10 +142,7 @@ class DayStatisticsViewController: UIViewController {
         
         dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text = String(dailyRateCalories)
         
-        dayProgressComponent.proteinsProgressBar.combinedAmountLabel.text = "0" + "/" + String(dailyProteinRate) + "g"
-        
-//        dayProgressComponent.proteinsProgressBar.consumedAmountLabel.tex
-        
+        dayProgressComponent.waterProgressComponent.elementRemainLabel.text = String(dailyWaterRate)
     }
     
     func setTableView() {
@@ -163,9 +168,6 @@ class DayStatisticsViewController: UIViewController {
     }
     
     @objc func productAdded(_ notification: Notification) {
-//        "name": productName ,"amount": amount, "calories": calorieAmount, "proteins": proteins, "fats": fats,
-//                           "carbs": carbs
-//        let productInfo = notification.userInfo!["product"]
         let name = notification.userInfo?["name"] as! String
         let amount = notification.userInfo?["amount"] as? Int
         let calories = notification.userInfo?["calories"] as? Int
@@ -178,13 +180,20 @@ class DayStatisticsViewController: UIViewController {
         consumedProducts.insert(newConsumedProduct, at: 0)
         dayTableView.reloadData()
         
-        changeCaloriesProgress(newProduct: newConsumedProduct)
+        if newConsumedProduct.name.lowercased() == "water" {
+              calculateRemainedCalorieOrWater(newProduct: newConsumedProduct)
+              changeWaterProgress(newProduct: newConsumedProduct)
+        } else {
+            changeCaloriesProgress(newProduct: newConsumedProduct)
+
+            calculateRemainedCalorieOrWater(newProduct: newConsumedProduct)
+            
+            calculateRemainedProteinsProgressBar(newProduct: newConsumedProduct)
+            calculateRemainedFatsProgressBar(newProduct: newConsumedProduct)
+            calculateRemainedCarbsProgressBar(newProduct: newConsumedProduct)
+        }
         
-        calculateRemainedCalories(newProduct: newConsumedProduct)
         
-        calculateRemainedProteins(newProduct: newConsumedProduct)
-        calculateRemainedFats(newProduct: newConsumedProduct)
-        calculateRemainedCarbs(newProduct: newConsumedProduct)
         
     }
     
@@ -192,21 +201,35 @@ class DayStatisticsViewController: UIViewController {
         dayProgressComponent.calorieProgressView.progress += Float(newProduct.calories) / Float(dailyRateCalories)
     }
     
-    func calculateRemainedCalories(newProduct: Product) {
-        guard let remainText = dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text else { return }
+    func changeWaterProgress(newProduct: Product) {
+        dayProgressComponent.waterProgressView.progress += Float(newProduct.amount) / Float(dailyWaterRate)
+    }
+
+    func calculateRemainedCalorieOrWater(newProduct: Product) {
+        var progressComponent = dayProgressComponent.caloriesProgressComponent
+        var neededMeasure = newProduct.calories
+        var textAfterReaching = "extra"
+        if newProduct.name.lowercased() == "water" {
+            progressComponent = dayProgressComponent.waterProgressComponent
+            neededMeasure = newProduct.amount
+            textAfterReaching = ""
+        }
+        guard let remainText = progressComponent.elementRemainLabel.text else { return }
         
-        let remainAmountCalorie = (Int(remainText) ?? 0) - Int(newProduct.calories)
-        
-        if remainAmountCalorie >= 0 {
-            dayProgressComponent.caloriesProgressComponent.left1.text = "left"
+        let remainedAmount = (Int(remainText) ?? 0) - Int(neededMeasure)
+
+        if remainedAmount >= 0 {
+            progressComponent.left1.text = "left"
         } else {
-            dayProgressComponent.caloriesProgressComponent.left1.text = "extra"
+            progressComponent.left1.text = textAfterReaching
         }
         
-        dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text = String(remainAmountCalorie)
+        progressComponent.elementRemainLabel.text = String(remainedAmount)
+
+        
     }
     
-    func calculateRemainedProteins(newProduct: Product) {
+    func calculateRemainedProteinsProgressBar(newProduct: Product) {
         dayProgressComponent.proteinsProgressBar.progressBar.progress += round(newProduct.proteins / Float(dailyProteinRate) * 10000) / 10000
         
         progressBarProteinTracker += round(newProduct.proteins / Float(dailyProteinRate) * 10000) / 10000
@@ -214,26 +237,25 @@ class DayStatisticsViewController: UIViewController {
         print("After adding", dayProgressComponent.proteinsProgressBar.progressBar.progress)
         print(newProduct.proteins / Float(dailyProteinRate))
         
-        recalculateProteins(currentProduct: newProduct, operation: "+")
+        recalculateNutrients(currentProduct: newProduct, operation: .add, nutrient: .proteins)
     }
     
-    func calculateRemainedFats(newProduct: Product) {
+    func calculateRemainedFatsProgressBar(newProduct: Product) {
         dayProgressComponent.fatsProgressBar.progressBar.progress += round(newProduct.fats / Float(dailyFatsRate) * 10000) / 10000
         
         progressBarFatsTracker += round(newProduct.fats / Float(dailyFatsRate) * 10000) / 10000
-        
-        print(newProduct.fats, "AAA")
-       
-        recalculateFats(currentProduct: newProduct, operation: "+")
+ 
+        recalculateNutrients(currentProduct: newProduct, operation: .add, nutrient: .fats)
     }
     
-    func calculateRemainedCarbs(newProduct: Product) {
+    func calculateRemainedCarbsProgressBar(newProduct: Product) {
         dayProgressComponent.carbsProgressBar.progressBar.progress += round(newProduct.carbs / Float(dailyCarbsRate) * 10000) / 10000
         
         progressBarCarbsTracker += round(newProduct.carbs / Float(dailyCarbsRate) * 10000) / 10000
-        
-        recalculateCarbs(currentProduct: newProduct, operation: "+")
+
+        recalculateNutrients(currentProduct: newProduct, operation: .add, nutrient: .carbs)
     }
+    
 }
 
 extension DayStatisticsViewController: UITableViewDelegate {
@@ -252,24 +274,33 @@ extension DayStatisticsViewController: UITableViewDelegate {
             print(Float(currentProduct.calories))
             print(Float(dailyRateCalories))
            
-//            recalculateProgressAfterDeleting(currentProduct: currentProduct)
             dayProgressComponent.calorieProgressView.progress -= Float(currentProduct.calories) / Float(dailyRateCalories)
+            
+            dayProgressComponent.waterProgressView.progress -= Float(currentProduct.amount) / Float(dailyWaterRate)
             
            recalculateProgressAfterDeleting(currentProduct: currentProduct)
             
            
             guard let remainText = dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text else { return }
             
-            let remainAmountCalorie = (Int(remainText) ?? 0) + currentProduct.calories
+            guard let remainTextWater = dayProgressComponent.waterProgressComponent.elementRemainLabel.text else { return }
             
+            let remainAmountCalorie = (Int(remainText) ?? 0) + currentProduct.calories
+            let remainAmountWater = (Int(remainTextWater) ?? 0) + currentProduct.amount
             if remainAmountCalorie >= 0 {
                 dayProgressComponent.caloriesProgressComponent.left1.text = "left"
             } else {
                 dayProgressComponent.caloriesProgressComponent.left1.text = "extra"
             }
             
-            dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text = String(remainAmountCalorie)
+            if remainAmountWater >= 0 {
+                dayProgressComponent.waterProgressComponent.left1.text = "left"
+            } else {
+                dayProgressComponent.waterProgressComponent.left1.text = ""
+            }
             
+            dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text = String(remainAmountCalorie)
+            dayProgressComponent.waterProgressComponent.elementRemainLabel.text = String(remainAmountWater)
             
             consumedProducts.remove(at: indexPath.row)
            
@@ -280,7 +311,7 @@ extension DayStatisticsViewController: UITableViewDelegate {
     
     func recalculateProgressAfterDeleting(currentProduct: Product) {
         progressBarProteinTracker -= round(Float(currentProduct.proteins) / Float(dailyProteinRate) * 10000) / 10000
-        recalculateProteins(currentProduct: currentProduct, operation: "-")
+        recalculateNutrients(currentProduct: currentProduct, operation: .delete, nutrient: .proteins)
         if progressBarProteinTracker <= 1 && consumedProducts.count > 1{
             dayProgressComponent.proteinsProgressBar.progressBar.progress -= round(Float(currentProduct.proteins) / Float(dailyProteinRate) * 10000) / 10000
             
@@ -290,19 +321,18 @@ extension DayStatisticsViewController: UITableViewDelegate {
         }
         
         progressBarFatsTracker -= round(Float(currentProduct.fats) / Float(dailyFatsRate) * 10000) / 10000
-        recalculateFats(currentProduct: currentProduct, operation: "-")
+        recalculateNutrients(currentProduct: currentProduct, operation: .delete, nutrient: .fats)
         if progressBarFatsTracker <= 1 && consumedProducts.count > 1{
             dayProgressComponent.fatsProgressBar.progressBar.progress -= round(Float(currentProduct.fats) / Float(dailyFatsRate) * 10000) / 10000
-            print("CONSUMED PRODUCTS COUNT", consumedProducts.count)
+
         } else if progressBarFatsTracker < 0 || consumedProducts.count == 1 {
             progressBarFatsTracker = 0
             dayProgressComponent.fatsProgressBar.progressBar.progress = 0
-            print(progressBarFatsTracker)
         }
         
 
         progressBarCarbsTracker -= round(Float(currentProduct.carbs) / Float(dailyCarbsRate) * 10000) / 10000
-        recalculateCarbs(currentProduct: currentProduct, operation: "-")
+        recalculateNutrients(currentProduct: currentProduct, operation: .delete, nutrient: .carbs)
         if progressBarCarbsTracker <= 1 && consumedProducts.count > 1{
             dayProgressComponent.carbsProgressBar.progressBar.progress -= round(Float(currentProduct.carbs) / Float(dailyCarbsRate) * 10000) / 10000
         } else if progressBarCarbsTracker < 0 || consumedProducts.count == 1 {
@@ -313,58 +343,41 @@ extension DayStatisticsViewController: UITableViewDelegate {
         
     }
     
-    func recalculateProteins(currentProduct: Product, operation: String) {
-        //Calculate proteins after adding or deleting
-        let consumedProteinAmount = Float(dayProgressComponent.proteinsProgressBar.consumedAmountLabel.text ?? "0") ?? 0.0
-        var newProteinsValue = ""
+    
+    func recalculateNutrients(currentProduct: Product, operation: Operations, nutrient: Nutrients) {
+        var consumedNutrientAmountBar: NutrientProgressBarView
+        var consumedNutrientAmount: Float
+        var newValue: String
+        var productNutrient: Float
+        var dailyRate: Int
         
-        if operation == "+" {
-            newProteinsValue = String(format: "%.1f", consumedProteinAmount + currentProduct.proteins)
-        } else {
-            newProteinsValue = String(format: "%.1f", consumedProteinAmount - currentProduct.proteins)
+        switch nutrient {
+        case .proteins:
+            consumedNutrientAmountBar = dayProgressComponent.proteinsProgressBar
+            consumedNutrientAmount =  Float(consumedNutrientAmountBar.consumedAmountLabel.text ?? "0") ?? 0.0
+            productNutrient = currentProduct.proteins
+            dailyRate = dailyProteinRate
+        case .fats:
+            consumedNutrientAmountBar = dayProgressComponent.fatsProgressBar
+            consumedNutrientAmount = Float(consumedNutrientAmountBar.consumedAmountLabel.text ?? "0") ?? 0.0
+            productNutrient = currentProduct.fats
+            dailyRate = dailyFatsRate
+        case .carbs:
+            consumedNutrientAmountBar = dayProgressComponent.carbsProgressBar
+            consumedNutrientAmount = Float(consumedNutrientAmountBar.consumedAmountLabel.text ?? "0") ?? 0.0
+            productNutrient = currentProduct.carbs
+            dailyRate = dailyCarbsRate
         }
         
-
-        dayProgressComponent.proteinsProgressBar.consumedAmountLabel.text = newProteinsValue
-        dayProgressComponent.proteinsProgressBar.combinedAmountLabel.text = newProteinsValue + "/" + String(dailyProteinRate) + "g"
-    }
-    
-    
-    func recalculateFats(currentProduct: Product, operation: String) {
-        //Calculate proteins after adding or deleting
-        let consumedFatsAmount = Float(dayProgressComponent.fatsProgressBar.consumedAmountLabel.text ?? "0") ?? 0.0
-        var newFatsValue = ""
-        
-        if operation == "+" {
-            newFatsValue = String(format: "%.1f", consumedFatsAmount + currentProduct.fats)
+        if operation == .add {
+            newValue = String(format: "%.1f", consumedNutrientAmount + productNutrient)
         } else {
-            newFatsValue = String(format: "%.1f", consumedFatsAmount - currentProduct.fats)
+            newValue = String(format: "%.1f", consumedNutrientAmount - productNutrient)
         }
         
-
-        dayProgressComponent.fatsProgressBar.consumedAmountLabel.text = newFatsValue
-        dayProgressComponent.fatsProgressBar.combinedAmountLabel.text = newFatsValue + "/" + String(dailyFatsRate) + "g"
+        consumedNutrientAmountBar.consumedAmountLabel.text = newValue
+        consumedNutrientAmountBar.combinedAmountLabel.text = newValue + "/" + String(dailyRate) + "g"
     }
-    
-    
-    func recalculateCarbs(currentProduct: Product, operation: String) {
-        //Calculate proteins after adding or deleting
-        let consumedCarbsAmount = Float(dayProgressComponent.carbsProgressBar.consumedAmountLabel.text ?? "0") ?? 0.0
-        var newCarbsValue = ""
-        
-        if operation == "+" {
-            newCarbsValue = String(format: "%.1f", consumedCarbsAmount + currentProduct.carbs)
-        } else {
-            newCarbsValue = String(format: "%.1f", consumedCarbsAmount - currentProduct.carbs)
-        }
-        
-
-        dayProgressComponent.carbsProgressBar.consumedAmountLabel.text = newCarbsValue
-        print(dayProgressComponent.carbsProgressBar.consumedAmountLabel.text)
-        dayProgressComponent.carbsProgressBar.combinedAmountLabel.text = newCarbsValue + "/" + String(dailyCarbsRate) + "g"
-    }
-    
-    
 }
 extension DayStatisticsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -377,5 +390,3 @@ extension DayStatisticsViewController: UITableViewDataSource {
         return cell
     }
 }
-
-
