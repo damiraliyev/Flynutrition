@@ -55,7 +55,10 @@ class DayStatisticsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+//        view.backgroundColor = UIColor(red: 0.94902, green: 0.94902, blue: 0.968627, alpha: 1)
         view.backgroundColor = .systemGray6
+        
+        print(UIColor.systemGray6.cgColor)
         title = "Today"
         setup()
         layout()
@@ -133,6 +136,7 @@ class DayStatisticsViewController: UIViewController {
         
         dayProgressComponent = DayProgressComponent(circularProgressView: calorieProgressView)
         dayProgressComponent.layer.cornerRadius = 7
+       
     
         dayProgressComponent.translatesAutoresizingMaskIntoConstraints = false
         dayProgressComponent.backgroundColor = .white
@@ -143,7 +147,9 @@ class DayStatisticsViewController: UIViewController {
         dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text = String(dailyRateCalories)
         
         dayProgressComponent.waterProgressComponent.elementRemainLabel.text = String(dailyWaterRate)
+        
     }
+
     
     func setTableView() {
         dayTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -281,17 +287,9 @@ extension DayStatisticsViewController: UITableViewDelegate {
             
             let remainAmountCalorie = (Int(remainText) ?? 0) + currentProduct.calories
             let remainAmountWater = (Int(remainTextWater) ?? 0) + currentProduct.amount
-            if remainAmountCalorie >= 0 {
-                dayProgressComponent.caloriesProgressComponent.left1.text = "left"
-            } else {
-                dayProgressComponent.caloriesProgressComponent.left1.text = "extra"
-            }
             
-            if remainAmountWater >= 0 {
-                dayProgressComponent.waterProgressComponent.left1.text = "left"
-            } else {
-                dayProgressComponent.waterProgressComponent.left1.text = ""
-            }
+            changeTextBasedOnRemainder(remainAmount: remainAmountCalorie, isWater: false)
+            changeTextBasedOnRemainder(remainAmount: remainAmountWater, isWater: true)
             
             dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text = String(remainAmountCalorie)
             dayProgressComponent.waterProgressComponent.elementRemainLabel.text = String(remainAmountWater)
@@ -301,6 +299,26 @@ extension DayStatisticsViewController: UITableViewDelegate {
             tableView.reloadData()
             
         }
+    }
+    
+    func changeTextBasedOnRemainder(remainAmount: Int, isWater: Bool) {
+        var textAfterReaching: String
+        var component: NutrientCircularProgressView = dayProgressComponent.caloriesProgressComponent
+        
+        if isWater {
+            textAfterReaching = ""
+            component = dayProgressComponent.waterProgressComponent
+        }
+        else {
+            textAfterReaching = "extra"
+        }
+        
+        if remainAmount >= 0{
+            component.left1.text = "left"
+        } else {
+            component.left1.text = textAfterReaching
+        }
+        
     }
     
     func recalculateProgressAfterDeleting(currentProduct: Product) {

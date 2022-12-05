@@ -87,7 +87,9 @@ class NutrientCircularProgressView: UIView {
 
             nutritionProgressView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: -nutritionProgressView.center.x),
             nutritionProgressView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: nutritionProgressView.getLineWidth()),
-            nutritionProgressView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            nutritionProgressView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            nutritionProgressView.widthAnchor.constraint(equalToConstant: 0),
+            nutritionProgressView.heightAnchor.constraint(equalToConstant: 0),
         ])
         
         NSLayoutConstraint.activate([

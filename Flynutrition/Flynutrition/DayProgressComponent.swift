@@ -53,7 +53,7 @@ class DayProgressComponent: UIView {
         waterProgressComponent = NutrientCircularProgressView(circularProgressView: waterProgressView,imageName: "drop.pdf", unit: "ml", color: .systemBlue)
         
 
-        
+       
         
         circularProgressStack.translatesAutoresizingMaskIntoConstraints = false
         circularProgressStack.backgroundColor = .white
