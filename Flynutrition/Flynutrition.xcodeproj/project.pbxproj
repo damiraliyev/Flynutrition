@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		68066DE429249EDE009C27D0 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68066DE329249EDE009C27D0 /* Model.swift */; };
+		68181455294A024C00A165EF /* SetttingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68181454294A024C00A165EF /* SetttingsViewController.swift */; };
+		68181457294A034400A165EF /* ActivityModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68181456294A034400A165EF /* ActivityModeView.swift */; };
 		689B2F9A2920B2C100302362 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B2F992920B2C100302362 /* AppDelegate.swift */; };
 		689B2F9E2920B2C100302362 /* DayStatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B2F9D2920B2C100302362 /* DayStatisticsViewController.swift */; };
 		689B2FA32920B2C300302362 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 689B2FA22920B2C300302362 /* Assets.xcassets */; };
@@ -27,6 +29,8 @@
 
 /* Begin PBXFileReference section */
 		68066DE329249EDE009C27D0 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		68181454294A024C00A165EF /* SetttingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetttingsViewController.swift; sourceTree = "<group>"; };
+		68181456294A034400A165EF /* ActivityModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityModeView.swift; sourceTree = "<group>"; };
 		689B2F962920B2C100302362 /* Flynutrition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flynutrition.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		689B2F992920B2C100302362 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		689B2F9D2920B2C100302362 /* DayStatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayStatisticsViewController.swift; sourceTree = "<group>"; };
@@ -80,12 +84,14 @@
 				689B2FBC2920BDCA00302362 /* MainTabBarController.swift */,
 				689B2F9D2920B2C100302362 /* DayStatisticsViewController.swift */,
 				689B2FC02920C08400302362 /* AddProductsViewController.swift */,
+				68B04D7A29253ECF00C56932 /* ProductInfroViewController.swift */,
+				68181454294A024C00A165EF /* SetttingsViewController.swift */,
+				68181456294A034400A165EF /* ActivityModeView.swift */,
 				68066DE329249EDE009C27D0 /* Model.swift */,
 				689B2FAE2920B7C700302362 /* Factory.swift */,
 				689B2FBB2920BBA100302362 /* Cells */,
 				689B2FBA2920BB7700302362 /* DayProgressComponentFiles */,
 				689B2FAD2920B39400302362 /* Files */,
-				68B04D7A29253ECF00C56932 /* ProductInfroViewController.swift */,
 				68B04D7C2925425000C56932 /* NutrientView+Info.swift */,
 			);
 			path = Flynutrition;
@@ -197,6 +203,7 @@
 				68B04D7D2925425000C56932 /* NutrientView+Info.swift in Sources */,
 				68066DE429249EDE009C27D0 /* Model.swift in Sources */,
 				68B04D7B29253ECF00C56932 /* ProductInfroViewController.swift in Sources */,
+				68181455294A024C00A165EF /* SetttingsViewController.swift in Sources */,
 				689B2F9E2920B2C100302362 /* DayStatisticsViewController.swift in Sources */,
 				689B2FBD2920BDCA00302362 /* MainTabBarController.swift in Sources */,
 				689B2FB52920B9EF00302362 /* NutrientProgressBarView.swift in Sources */,
@@ -204,6 +211,7 @@
 				689B2F9A2920B2C100302362 /* AppDelegate.swift in Sources */,
 				689B2FB12920B99900302362 /* CircularProgressView.swift in Sources */,
 				689B2FB72920BA0B00302362 /* DayProgressComponent.swift in Sources */,
+				68181457294A034400A165EF /* ActivityModeView.swift in Sources */,
 				689B2FAF2920B7C700302362 /* Factory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -32,13 +32,21 @@ class MainTabBarController: UITabBarController {
         let addProductsVC = AddProductsViewController()
         addProductsVC.tabBarItem = UITabBarItem(title: "Add", image: UIImage(systemName: "plus"), selectedImage: nil)
         
+        let settingsVC = SettingsViewController()
+        settingsVC.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(systemName: "staroflife.fill"), selectedImage: nil)
+        
+        let settingsNC = UINavigationController(rootViewController: settingsVC)
+
+        settingsNC.navigationBar.prefersLargeTitles = true
+        
+        
         
 //        let tabBarAppearance = UITabBarAppearance()
 //        tabBarAppearance.configureWithOpaqueBackground()
 //        tabBarAppearance.backgroundColor = .systemBackground
 //        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
         
-        viewControllers = [dayStatisticsNC]
+        viewControllers = [dayStatisticsNC, settingsNC]
         
         loadAllControllers()
         
