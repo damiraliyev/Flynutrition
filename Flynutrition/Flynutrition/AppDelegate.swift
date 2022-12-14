@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         window?.rootViewController = mainTabBarController
 //        window?.rootViewController = SettingsViewController()
-
+        window?.overrideUserInterfaceStyle = .light
         
         
         

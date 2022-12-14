@@ -31,7 +31,7 @@ class ActivityModeView: UIView {
         
         modeLabel.translatesAutoresizingMaskIntoConstraints = false
         modeLabel.text = modeText
-        modeLabel.font = UIFont.systemFont(ofSize: 20)
+        modeLabel.font = UIFont.systemFont(ofSize: 18)
         modeLabel.textColor = .black
         
         layout()

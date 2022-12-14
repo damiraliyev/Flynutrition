@@ -16,7 +16,7 @@ class MainTabBarController: UITabBarController {
         super.viewDidLoad()
         view.backgroundColor = .systemGray6
         delegate = self
-        
+//        view.overrideUserInterfaceStyle = .light
         setupTabBar()
     }
     
