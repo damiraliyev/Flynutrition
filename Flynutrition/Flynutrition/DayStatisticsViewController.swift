@@ -217,16 +217,16 @@ class DayStatisticsViewController: UIViewController {
 
     func calculateRemainedCalorieOrWater(newProduct: Product) {
         var progressComponent = dayProgressComponent.caloriesProgressComponent
-        var neededMeasure = newProduct.calories
+        var deletedAmount = newProduct.calories
         var textAfterReaching = "extra"
         if newProduct.name.lowercased() == "water" {
             progressComponent = dayProgressComponent.waterProgressComponent
-            neededMeasure = newProduct.amount
+            deletedAmount = newProduct.amount
             textAfterReaching = ""
         }
         guard let remainText = progressComponent.elementRemainLabel.text else { return }
         
-        let remainedAmount = (Int(remainText) ?? 0) - Int(neededMeasure)
+        let remainedAmount = (Int(remainText) ?? 0) - Int(deletedAmount)
 
         if remainedAmount >= 0 {
             progressComponent.left1.text = "left"
@@ -291,13 +291,19 @@ extension DayStatisticsViewController: UITableViewDelegate {
             guard let remainTextWater = dayProgressComponent.waterProgressComponent.elementRemainLabel.text else { return }
             
             let remainAmountCalorie = (Int(remainText) ?? 0) + currentProduct.calories
-            let remainAmountWater = (Int(remainTextWater) ?? 0) + currentProduct.amount
+            
+            if  currentProduct.name.lowercased() == "water" {
+                let remainAmountWater = (Int(remainTextWater) ?? 0) + currentProduct.amount
+                changeTextBasedOnRemainder(remainAmount: remainAmountWater, isWater: true)
+                dayProgressComponent.waterProgressComponent.elementRemainLabel.text = String(remainAmountWater)
+            }
+            
             
             changeTextBasedOnRemainder(remainAmount: remainAmountCalorie, isWater: false)
-            changeTextBasedOnRemainder(remainAmount: remainAmountWater, isWater: true)
+            
             
             dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text = String(remainAmountCalorie)
-            dayProgressComponent.waterProgressComponent.elementRemainLabel.text = String(remainAmountWater)
+            
             
             consumedProducts.remove(at: indexPath.row)
            
@@ -329,6 +335,7 @@ extension DayStatisticsViewController: UITableViewDelegate {
     func recalculateProgressAfterDeleting(currentProduct: Product) {
         progressBarProteinTracker -= round(Float(currentProduct.proteins) / Float(dailyProteinRate) * 10000) / 10000
         recalculateNutrients(currentProduct: currentProduct, operation: .delete, nutrient: .proteins)
+        
         if progressBarProteinTracker <= 1 && consumedProducts.count > 1{
             dayProgressComponent.proteinsProgressBar.progressBar.progress -= round(Float(currentProduct.proteins) / Float(dailyProteinRate) * 10000) / 10000
             

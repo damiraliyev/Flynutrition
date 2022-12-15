@@ -254,7 +254,8 @@ extension ProductInfoViewController: UITextFieldDelegate {
         // And initally amountTextField.text will be displayed and I decided leave it it like this
         amount = Int(sender.text ?? "") ?? 0
         amountTextField.text = String(amount)
-
+        print("Amount", amount)
+        print(Int(sender.text ?? ""))
         
         caloriesAmount = (amount * initialCalories) / 100
         proteinsAmount = round((Float(amount) * initialProteins) / 100 * 10) / 10

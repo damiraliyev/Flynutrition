@@ -19,7 +19,14 @@ class SettingsViewController: UIViewController {
     
     let activityModeLabel = UILabel()
     
-    let activeMode = ActivityModeView(isOn: true, modeText: "Active mode")
+    var activeMode = ActivityModeView(isOn: true, modeText: "Active mode") {
+        didSet {
+            if activeMode.isOnSwitch.isOn {
+                passiveMode.isOnSwitch.isOn = false
+                print("AAA")
+            }
+        }
+    }
     
     let passiveMode = ActivityModeView(isOn: false, modeText: "Passive mode")
     
@@ -32,17 +39,26 @@ class SettingsViewController: UIViewController {
         title = "Settings"
         setup()
         layout()
+        setupNavBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.prefersLargeTitles = true
         
+        
     }
    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.navigationBar.prefersLargeTitles = false
+    }
+    
+    func setupNavBar() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
     
     func setup() {
@@ -92,7 +108,7 @@ class SettingsViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            activeMode.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 128),
+            activeMode.topAnchor.constraint(equalTo: weightTextField.bottomAnchor,constant: 16),
             activeMode.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
         ])
         
