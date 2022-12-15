@@ -25,8 +25,11 @@ class SettingsViewController: UIViewController {
         }
     }
     
+    let activeModeMeasures = ["proteins": 1.5, "fats": 0.9, "carbs": 2.0]
+    
     let passiveMode = ActivityModeView(isOn: false, modeText: "Passive mode", id: 1)
     
+    let passiveModeMeasures = ["proteins": 0.8, "fats": 0.7, "carbs": 1.5]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -128,8 +131,24 @@ extension SettingsViewController: SwitchDelegate {
         
         if id == 0 {
             passiveMode.isOnSwitch.isOn = !activeMode.isOnSwitch.isOn
+            if activeMode.isOnSwitch.isOn {
+                NotificationCenter.default.post(name: modeChanged, object: nil, userInfo: activeModeMeasures)
+                print("Active mode measures should be posted")
+            } else {
+                NotificationCenter.default.post(name: modeChanged, object: nil, userInfo: passiveModeMeasures)
+                print("Passive mode measures should be posted")
+            }
+            
         } else if id == 1 {
             activeMode.isOnSwitch.isOn = !passiveMode.isOnSwitch.isOn
+            
+            if passiveMode.isOnSwitch.isOn {
+                NotificationCenter.default.post(name: modeChanged, object: nil, userInfo: passiveModeMeasures)
+                print("Passive mode measures should be posted")
+            } else {
+                NotificationCenter.default.post(name: modeChanged, object: nil, userInfo: activeModeMeasures)
+                print("Active mode measures should be posted")
+            }
         }
         
 //        if activeMode.isOnSwitch.isOn {

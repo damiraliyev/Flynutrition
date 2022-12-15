@@ -28,10 +28,11 @@ class DayStatisticsViewController: UIViewController {
     var consumedProducts: [Product] = [
     ]
     
+    var weight: Double = 70
     var dailyRateCalories = 2000
     var dailyWaterRate = 2000
     var dailyProteinRate = 105
-    var dailyFatsRate = 56
+    var dailyFatsRate = 63
     var dailyCarbsRate = 140
     
     //Max for progress bar is 1, but the sum of all products can be more than this
@@ -63,6 +64,8 @@ class DayStatisticsViewController: UIViewController {
         setup()
         layout()
         registerForNotifications()
+        
+//        dayProgressComponent.proteinsProgressBar.consumedAmountLabel.text
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -175,6 +178,8 @@ class DayStatisticsViewController: UIViewController {
     
     func registerForNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(productAdded), name: NSNotification.Name("AddProduct"), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(changeMode), name: modeChanged, object: nil)
     }
     
     @objc func productAdded(_ notification: Notification) {
@@ -202,8 +207,32 @@ class DayStatisticsViewController: UIViewController {
             calculateRemainedFatsProgressBar(newProduct: newConsumedProduct)
             calculateRemainedCarbsProgressBar(newProduct: newConsumedProduct)
         }
+    }
+    
+    @objc func changeMode(_ notification: Notification) {
+        dailyProteinRate = Int(notification.userInfo?["proteins"] as! Double * weight)
+        dailyFatsRate = Int(notification.userInfo?["fats"] as! Double * weight)
+        dailyCarbsRate = Int(notification.userInfo?["carbs"] as! Double * weight)
+        
+        adjustProgressToModeChanging()
+      
+    }
+    
+    func adjustProgressToModeChanging() {
+        dayProgressComponent.proteinsProgressBar.combinedAmountLabel.text = (dayProgressComponent.proteinsProgressBar.consumedAmountLabel.text ?? "0") + "/" + String(dailyProteinRate) + "g"
+        dayProgressComponent.fatsProgressBar.combinedAmountLabel.text = (dayProgressComponent.proteinsProgressBar.consumedAmountLabel.text ?? "0") + "/" + String(dailyFatsRate) + "g"
+        
+        dayProgressComponent.carbsProgressBar.combinedAmountLabel.text = (dayProgressComponent.proteinsProgressBar.consumedAmountLabel.text ?? "0") + "/" + String(dailyCarbsRate) + "g"
         
         
+        let alreadyConsumedProteins = Float(dayProgressComponent.proteinsProgressBar.consumedAmountLabel.text!)!
+        dayProgressComponent.proteinsProgressBar.progressBar.progress = round(alreadyConsumedProteins / Float(dailyProteinRate) * 10000) / 10000
+        
+        let alreadyConsumedFats = Float(dayProgressComponent.fatsProgressBar.consumedAmountLabel.text!)!
+        dayProgressComponent.fatsProgressBar.progressBar.progress = round(alreadyConsumedFats / Float(dailyFatsRate) * 10000) / 10000
+        
+        let alreadyConsumedCarbs = Float(dayProgressComponent.carbsProgressBar.consumedAmountLabel.text!)!
+        dayProgressComponent.carbsProgressBar.progressBar.progress = round(alreadyConsumedCarbs / Float(dailyCarbsRate) * 10000) / 10000
         
     }
     
