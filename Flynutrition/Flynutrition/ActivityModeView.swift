@@ -8,10 +8,18 @@
 import Foundation
 import UIKit
 
+protocol SwitchDelegate: AnyObject {
+    func switchTurned(id: Int)
+}
+
 class ActivityModeView: UIView {
     
     let isOnSwitch = UISwitch()
     let modeLabel = UILabel()
+    
+    var id = 0
+    
+    weak var switchDelegate: SwitchDelegate?
 //
 //    override init(frame: CGRect) {
 //        super.init(frame: frame)
@@ -20,7 +28,7 @@ class ActivityModeView: UIView {
 //        layout()
 //    }
 //
-    init(isOn: Bool, modeText: String) {
+    init(isOn: Bool, modeText: String, id: Int) {
         super.init(frame: .zero)
         
 //        backgroundColor = .systemGray6
@@ -34,6 +42,8 @@ class ActivityModeView: UIView {
         modeLabel.font = UIFont.systemFont(ofSize: 18)
         modeLabel.textColor = .black
         
+        self.id = id
+        
         layout()
         
     }
@@ -44,7 +54,7 @@ class ActivityModeView: UIView {
         addSubview(isOnSwitch)
         addSubview(modeLabel)
         
-        isOnSwitch.addTarget(self, action: #selector(printSMTh), for: .primaryActionTriggered)
+        isOnSwitch.addTarget(self, action: #selector(switchChanged), for: .primaryActionTriggered)
         
         NSLayoutConstraint.activate([
             isOnSwitch.topAnchor.constraint(equalTo: topAnchor),
@@ -62,8 +72,9 @@ class ActivityModeView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc func printSMTh() {
-        print("AA")
+    @objc func switchChanged() {
+        print("switch Changed")
+        switchDelegate?.switchTurned(id: id)
     }
     
     override var intrinsicContentSize: CGSize {

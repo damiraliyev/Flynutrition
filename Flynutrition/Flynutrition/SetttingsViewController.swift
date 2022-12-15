@@ -19,16 +19,13 @@ class SettingsViewController: UIViewController {
     
     let activityModeLabel = UILabel()
     
-    var activeMode = ActivityModeView(isOn: true, modeText: "Active mode") {
+    var activeMode = ActivityModeView(isOn: true, modeText: "Active mode", id: 0) {
         didSet {
-            if activeMode.isOnSwitch.isOn {
-                passiveMode.isOnSwitch.isOn = false
-                print("AAA")
-            }
+           print("Did Set")
         }
     }
     
-    let passiveMode = ActivityModeView(isOn: false, modeText: "Passive mode")
+    let passiveMode = ActivityModeView(isOn: false, modeText: "Passive mode", id: 1)
     
     
     override func viewDidLoad() {
@@ -40,6 +37,9 @@ class SettingsViewController: UIViewController {
         setup()
         layout()
         setupNavBar()
+        
+        activeMode.switchDelegate = self
+        passiveMode.switchDelegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -117,6 +117,25 @@ class SettingsViewController: UIViewController {
             passiveMode.leadingAnchor.constraint(equalTo: activeMode.leadingAnchor)
         ])
        
+    }
+    
+    
+}
+
+
+extension SettingsViewController: SwitchDelegate {
+    func switchTurned(id: Int) {
+        
+        if id == 0 {
+            passiveMode.isOnSwitch.isOn = !activeMode.isOnSwitch.isOn
+        } else if id == 1 {
+            activeMode.isOnSwitch.isOn = !passiveMode.isOnSwitch.isOn
+        }
+        
+//        if activeMode.isOnSwitch.isOn {
+//            passiveMode.isOnSwitch.isOn = false
+//        }
+    
     }
     
     
