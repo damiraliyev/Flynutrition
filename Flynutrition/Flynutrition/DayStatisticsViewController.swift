@@ -29,7 +29,7 @@ class DayStatisticsViewController: UIViewController {
     ]
     
     var weight: Double = 70
-    var dailyRateCalories = 2000
+    var dailyRateCalories = 2200
     var dailyWaterRate = 2000
     var dailyProteinRate = 105
     var dailyFatsRate = 63
@@ -152,9 +152,9 @@ class DayStatisticsViewController: UIViewController {
         dayProgressComponent.caloriesProgressComponent.nutritionProgressView.progress = 0.0
         dayProgressComponent.waterProgressComponent.nutritionProgressView.progress = 0.0
         
-        dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text = String(dailyRateCalories)
+        dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text = String(dailyRateCalories) + "kC"
         
-        dayProgressComponent.waterProgressComponent.elementRemainLabel.text = String(dailyWaterRate)
+        dayProgressComponent.waterProgressComponent.elementRemainLabel.text = String(dailyWaterRate) + "ml"
         
     }
 
@@ -254,15 +254,17 @@ class DayStatisticsViewController: UIViewController {
     func calculateRemainedCalorieOrWater(newProduct: Product) {
         print("CalculateRemainedCalorieOrWater")
         var progressComponent = dayProgressComponent.caloriesProgressComponent
+        var measure = "kC"
        
         var addedAmount = newProduct.calories
         var textAfterReaching = "extra"
         if newProduct.name.lowercased() == "water" {
             progressComponent = dayProgressComponent.waterProgressComponent
             addedAmount = newProduct.amount
+            measure = "ml"
             textAfterReaching = ""
         }
-        guard let remainText = progressComponent.elementRemainLabel.text else { return }
+        guard let remainText = progressComponent.elementRemainLabel.text?.dropLast(2) else { return }
         
         let remainedAmount = (Int(remainText) ?? 0) - Int(addedAmount)
 
@@ -272,7 +274,7 @@ class DayStatisticsViewController: UIViewController {
             progressComponent.left1.text = textAfterReaching
         }
         
-        progressComponent.elementRemainLabel.text = String(remainedAmount)
+        progressComponent.elementRemainLabel.text = String(remainedAmount) + measure
 
         
     }
@@ -327,23 +329,23 @@ extension DayStatisticsViewController: UITableViewDelegate {
            recalculateProgressAfterDeleting(currentProduct: currentProduct)
             
            
-            guard let remainText = dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text else { return }
+            guard let remainText = dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text?.dropLast(2) else { return }
             
-            guard let remainTextWater = dayProgressComponent.waterProgressComponent.elementRemainLabel.text else { return }
-            
+            guard let remainTextWater = dayProgressComponent.waterProgressComponent.elementRemainLabel.text?.dropLast(2) else { return }
+            print("RemainText", remainText)
             let remainAmountCalorie = (Int(remainText) ?? 0) + currentProduct.calories
-            
+            print(remainAmountCalorie)
             if  currentProduct.name.lowercased() == "water" {
                 let remainAmountWater = (Int(remainTextWater) ?? 0) + currentProduct.amount
                 changeTextBasedOnRemainder(remainAmount: remainAmountWater, isWater: true)
-                dayProgressComponent.waterProgressComponent.elementRemainLabel.text = String(remainAmountWater)
+                dayProgressComponent.waterProgressComponent.elementRemainLabel.text = String(remainAmountWater) + "ml"
             }
             
             
             changeTextBasedOnRemainder(remainAmount: remainAmountCalorie, isWater: false)
             
             
-            dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text = String(remainAmountCalorie)
+            dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text = String(remainAmountCalorie) + "kC"
             
             
             consumedProducts.remove(at: indexPath.row)
