@@ -271,19 +271,19 @@ extension ProductInfoViewController: UITextFieldDelegate {
     }
     
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: textField.text ?? "")) {
-
-            errorLabel.text = ""
-            errorLabel.isHidden = true
-            return true
-        } else {
-            errorLabel.text = "Text field can contain only numbers."
-            errorLabel.isHidden = false
-            
-            return false
-        }
-       
-    }
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        if CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: textField.text ?? "")) {
+//
+//            errorLabel.text = ""
+//            errorLabel.isHidden = true
+//            return true
+//        } else {
+//            errorLabel.text = "Text field can contain only numbers."
+//            errorLabel.isHidden = false
+//            
+//            return false
+//        }
+//       
+//    }
 
 }

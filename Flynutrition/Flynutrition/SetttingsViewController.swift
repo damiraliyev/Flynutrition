@@ -19,17 +19,19 @@ class SettingsViewController: UIViewController {
     
     let activityModeLabel = UILabel()
     
-    var activeMode = ActivityModeView(isOn: true, modeText: "Active mode", id: 0) {
-        didSet {
-           print("Did Set")
-        }
-    }
+    var weight: Double = 70.0
     
-    let activeModeMeasures = ["proteins": 1.5, "fats": 0.9, "carbs": 2.0]
+    var activeMode = ActivityModeView(isOn: true, modeText: "Active mode", id: 0)
+    
+    var activeModeMeasures: [String: Double] = ["proteins": 1.5, "fats": 0.9, "carbs": 2.0]
     
     let passiveMode = ActivityModeView(isOn: false, modeText: "Passive mode", id: 1)
     
-    let passiveModeMeasures = ["proteins": 0.8, "fats": 0.7, "carbs": 1.5]
+    var passiveModeMeasures: [String: Double] = ["proteins": 0.8, "fats": 0.7, "carbs": 1.5]
+    
+    let applyButton = makeButton(color: .systemBlue)
+    
+    let errorLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +57,7 @@ class SettingsViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.navigationBar.prefersLargeTitles = false
+   
     }
     
     func setupNavBar() {
@@ -76,6 +79,9 @@ class SettingsViewController: UIViewController {
         weightTextField.layer.borderColor = UIColor.black.cgColor
         weightTextField.textAlignment = .center
         weightTextField.backgroundColor = .white
+        weightTextField.text = "70"
+        weightTextField.delegate = self
+        weightTextField.addTarget(self, action: #selector(weightTextFieldChanged), for: .editingChanged)
         
         kgLabel.translatesAutoresizingMaskIntoConstraints = false
         kgLabel.text = "kg"
@@ -84,15 +90,30 @@ class SettingsViewController: UIViewController {
         activeMode.translatesAutoresizingMaskIntoConstraints = false
         
         passiveMode.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        applyButton.setTitle("Apply", for: .normal)
+        applyButton.layer.cornerRadius = 5
+        applyButton.addTarget(self, action: #selector(applySettings), for: .primaryActionTriggered)
+        
+        
+        
+        errorLabel.translatesAutoresizingMaskIntoConstraints = false
+        errorLabel.text = "Please, write a number to a text field."
+        errorLabel.textColor = .red
+        errorLabel.isHidden = true
+        
     }
     
     
     func layout() {
         view.addSubview(tipLabel)
         view.addSubview(weightTextField)
+        view.addSubview(errorLabel)
         view.addSubview(kgLabel)
         view.addSubview(activeMode)
         view.addSubview(passiveMode)
+        view.addSubview(applyButton)
         
         NSLayoutConstraint.activate([
             tipLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
@@ -106,12 +127,17 @@ class SettingsViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
+            errorLabel.leadingAnchor.constraint(equalTo: tipLabel.leadingAnchor),
+            errorLabel.topAnchor.constraint(equalTo: tipLabel.bottomAnchor, constant: 8)
+        ])
+        
+        NSLayoutConstraint.activate([
             kgLabel.leadingAnchor.constraint(equalTo: weightTextField.trailingAnchor, constant: 8),
             kgLabel.centerYAnchor.constraint(equalTo: weightTextField.centerYAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            activeMode.topAnchor.constraint(equalTo: weightTextField.bottomAnchor,constant: 16),
+            activeMode.topAnchor.constraint(equalTo: weightTextField.bottomAnchor,constant: 32),
             activeMode.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
         ])
         
@@ -119,10 +145,46 @@ class SettingsViewController: UIViewController {
             passiveMode.topAnchor.constraint(equalTo: activeMode.bottomAnchor, constant: 24),
             passiveMode.leadingAnchor.constraint(equalTo: activeMode.leadingAnchor)
         ])
+        
+        NSLayoutConstraint.activate([
+//            applyButton.topAnchor.constraint(equalTo: passiveMode.bottomAnchor, constant: 40),
+            applyButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+//            applyButton.leadingAnchor.constraint(equalTo: activeMode.leadingAnchor),
+            applyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            applyButton.widthAnchor.constraint(equalToConstant: 100),
+            applyButton.heightAnchor.constraint(equalToConstant: 40)
+        ])
        
     }
     
+    @objc func applySettings() {
+        animateButton()
+        
+        if let weightValue = Double(weightTextField.text!) {
+            errorLabel.isHidden = true
+            if activeMode.isOnSwitch.isOn {
+                activeModeMeasures["weight"] = weightValue
+                NotificationCenter.default.post(name: modeChanged, object: nil, userInfo: activeModeMeasures)
+                print("Active mode measures should be posted")
+            } else {
+                passiveModeMeasures["weight"] = weightValue
+                NotificationCenter.default.post(name: modeChanged, object: nil, userInfo: passiveModeMeasures)
+                print("Passive mode measures should be posted")
+            }
+        } else {
+            errorLabel.isHidden = false
+            return
+        }
+        
+    }
     
+    func animateButton() {
+        applyButton.alpha = 0.5
+        
+        UIView.animate(withDuration: 0.5) { [weak self] in
+            self!.applyButton.alpha = 1
+        }
+    }
 }
 
 
@@ -131,31 +193,33 @@ extension SettingsViewController: SwitchDelegate {
         
         if id == 0 {
             passiveMode.isOnSwitch.isOn = !activeMode.isOnSwitch.isOn
-            if activeMode.isOnSwitch.isOn {
-                NotificationCenter.default.post(name: modeChanged, object: nil, userInfo: activeModeMeasures)
-                print("Active mode measures should be posted")
-            } else {
-                NotificationCenter.default.post(name: modeChanged, object: nil, userInfo: passiveModeMeasures)
-                print("Passive mode measures should be posted")
-            }
-            
         } else if id == 1 {
             activeMode.isOnSwitch.isOn = !passiveMode.isOnSwitch.isOn
-            
-            if passiveMode.isOnSwitch.isOn {
-                NotificationCenter.default.post(name: modeChanged, object: nil, userInfo: passiveModeMeasures)
-                print("Passive mode measures should be posted")
-            } else {
-                NotificationCenter.default.post(name: modeChanged, object: nil, userInfo: activeModeMeasures)
-                print("Active mode measures should be posted")
-            }
         }
         
-//        if activeMode.isOnSwitch.isOn {
-//            passiveMode.isOnSwitch.isOn = false
-//        }
-    
+    }
+}
+
+
+extension SettingsViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if Double(textField.text!) == nil {
+            textField.text = String(weight)
+            return true
+        } else {
+            weight = Double(textField.text!)!
+            return true
+        }
     }
     
-    
+    @objc func weightTextFieldChanged(_ sender: UITextField) {
+        
+//        if sender.text == "" {
+//
+//        } else {
+//            let newWeight = Double(sender.text!) ?? weight
+//            weightTextField.text = String(newWeight)
+//        }
+
+    }
 }
