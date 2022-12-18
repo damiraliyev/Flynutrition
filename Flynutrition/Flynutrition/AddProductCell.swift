@@ -125,11 +125,7 @@ class AddProductCell: UITableViewCell {
     
     @objc func addPressed(sender: UIButton) {
         
-        sender.alpha = 0.3
-        
-        UIView.animate(withDuration: 0.5, delay: 0) {
-            sender.alpha = 1
-        }
+        sender.addClickAnimation()
         
         guard let productName = productNameLabel.text else { return }
         guard var amount = amountLabel.text?.dropLast() else { return }

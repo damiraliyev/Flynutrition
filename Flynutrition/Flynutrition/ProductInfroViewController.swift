@@ -222,11 +222,8 @@ class ProductInfoViewController: UIViewController {
     
     
     @objc func addWithChangedValue(_ sender: UIButton) {
-        sender.alpha = 0.3
         
-        UIView.animate(withDuration: 0.5, delay: 0) {
-            sender.alpha = 1
-        }
+        sender.addClickAnimation()
         
         if amountTextField.text == "0" {
             return

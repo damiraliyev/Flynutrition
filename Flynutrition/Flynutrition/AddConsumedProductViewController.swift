@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class AddProductsViewController: UIViewController {
+class AddConsumedProductViewController: UIViewController {
     
     var searchController = UISearchController()
     
@@ -50,6 +50,10 @@ class AddProductsViewController: UIViewController {
         navigationItem.hidesSearchBarWhenScrolling = false
 
         setupTableView()
+        
+        let plusBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewProductToList))
+        
+        navigationItem.rightBarButtonItem = plusBarButtonItem
     }
     
     func layout() {
@@ -76,10 +80,16 @@ class AddProductsViewController: UIViewController {
         
     }
     
+    @objc func addNewProductToList() {
+        let addNewProductVC = AddNewProductViewController()
+        
+        navigationController?.pushViewController(addNewProductVC, animated: false)
+    }
+    
 
 }
 
-extension AddProductsViewController: UITableViewDelegate {
+extension AddConsumedProductViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let productInfoVC = ProductInfoViewController()
         
@@ -91,7 +101,7 @@ extension AddProductsViewController: UITableViewDelegate {
     }
 }
 
-extension AddProductsViewController: UITableViewDataSource {
+extension AddConsumedProductViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 10
     }
@@ -105,7 +115,7 @@ extension AddProductsViewController: UITableViewDataSource {
     
 }
 
-extension AddProductsViewController: UISearchResultsUpdating {
+extension AddConsumedProductViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         
     }
@@ -113,7 +123,7 @@ extension AddProductsViewController: UISearchResultsUpdating {
     
 }
 
-extension AddProductsViewController: UISearchControllerDelegate {
+extension AddConsumedProductViewController: UISearchControllerDelegate {
     
     
     public func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -121,6 +131,6 @@ extension AddProductsViewController: UISearchControllerDelegate {
     }
 }
 
-extension AddProductsViewController: UISearchBarDelegate {
+extension AddConsumedProductViewController: UISearchBarDelegate {
     
 }

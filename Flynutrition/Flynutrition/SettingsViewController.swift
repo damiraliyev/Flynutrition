@@ -148,7 +148,7 @@ class SettingsViewController: UIViewController {
         
         NSLayoutConstraint.activate([
 //            applyButton.topAnchor.constraint(equalTo: passiveMode.bottomAnchor, constant: 40),
-            applyButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            applyButton.topAnchor.constraint(equalTo: passiveMode.bottomAnchor, constant: 64),
 //            applyButton.leadingAnchor.constraint(equalTo: activeMode.leadingAnchor),
             applyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             applyButton.widthAnchor.constraint(equalToConstant: 100),
@@ -158,7 +158,7 @@ class SettingsViewController: UIViewController {
     }
     
     @objc func applySettings() {
-        animateButton()
+        applyButton.addClickAnimation()
         
         if let weightValue = Double(weightTextField.text!) {
             errorLabel.isHidden = true
@@ -178,13 +178,7 @@ class SettingsViewController: UIViewController {
         
     }
     
-    func animateButton() {
-        applyButton.alpha = 0.5
-        
-        UIView.animate(withDuration: 0.5) { [weak self] in
-            self!.applyButton.alpha = 1
-        }
-    }
+
 }
 
 

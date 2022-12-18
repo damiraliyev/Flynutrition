@@ -37,3 +37,14 @@ func makeButton(color: UIColor) -> UIButton {
     
     return button
 }
+
+
+extension UIButton {
+    func addClickAnimation() {
+        alpha = 0.5
+        
+        UIView.animate(withDuration: 0.5, delay: 0) { [weak self] in
+            self!.alpha = 1
+        }
+    }
+}

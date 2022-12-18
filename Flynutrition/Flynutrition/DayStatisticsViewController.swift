@@ -171,7 +171,7 @@ class DayStatisticsViewController: UIViewController {
     }
     
     @objc func addProductPressed() {
-        let addProductsViewController = AddProductsViewController()
+        let addProductsViewController = AddConsumedProductViewController()
         addProductsViewController.navigationController?.navigationItem.searchController = UISearchController()
         navigationController?.pushViewController(addProductsViewController, animated: false)
     }
