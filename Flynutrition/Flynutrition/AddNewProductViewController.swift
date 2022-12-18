@@ -24,6 +24,16 @@ class AddNewProductViewController: UIViewController {
     
     let addNewProductButton = makeButton(color: .systemBlue)
     
+    let errorLabel = UILabel()
+    
+    
+    let measureStack = makeStackView(axis: .horizontal)
+    
+    let measureSegmentedControl = UISegmentedControl()
+    let measures = [Measure.g, Measure.ml]
+    
+    let measureTipLabel = makeLabel(withText: "Choose the measure:")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -46,6 +56,21 @@ class AddNewProductViewController: UIViewController {
         addNewProductButton.layer.cornerRadius = 5
         addNewProductButton.addTarget(self, action: #selector(addNewProduct), for: .primaryActionTriggered)
         
+        
+        errorLabel.translatesAutoresizingMaskIntoConstraints = false
+        errorLabel.textColor = .red
+        errorLabel.isHidden = true
+        
+        
+        measureStack.spacing = 10
+        
+        measureSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        measureSegmentedControl.insertSegment(withTitle: "g", at: 0, animated: true)
+        measureSegmentedControl.insertSegment(withTitle: "ml", at: 1, animated:    true)
+        measureSegmentedControl.selectedSegmentIndex = 0
+        
+        measureTipLabel.alpha = 0.5
+        
     }
     
     private func layout() {
@@ -57,6 +82,12 @@ class AddNewProductViewController: UIViewController {
         fieldsStackView.addArrangedSubview(fatsField)
         fieldsStackView.addArrangedSubview(carbsField)
         
+        
+        view.addSubview(measureStack)
+        measureStack.addArrangedSubview(measureTipLabel)
+        measureStack.addArrangedSubview(measureSegmentedControl)
+        
+        view.addSubview(errorLabel)
         view.addSubview(addNewProductButton)
         
         NSLayoutConstraint.activate([
@@ -66,7 +97,22 @@ class AddNewProductViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            addNewProductButton.topAnchor.constraint(equalTo: fieldsStackView.bottomAnchor, constant: 32),
+            measureStack.topAnchor.constraint(equalTo: fieldsStackView.bottomAnchor, constant: 32),
+            measureStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8)
+        ])
+        
+        NSLayoutConstraint.activate([
+            measureSegmentedControl.widthAnchor.constraint(equalToConstant: 100),
+            measureSegmentedControl.heightAnchor.constraint(equalToConstant: 35)
+        ])
+        
+        NSLayoutConstraint.activate([
+            errorLabel.topAnchor.constraint(equalTo: measureStack.bottomAnchor, constant: 24),
+            errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            addNewProductButton.topAnchor.constraint(equalTo: measureStack.bottomAnchor, constant: 64),
             addNewProductButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             addNewProductButton.widthAnchor.constraint(equalToConstant: 160),
             addNewProductButton.heightAnchor.constraint(equalToConstant: 45)
@@ -75,5 +121,55 @@ class AddNewProductViewController: UIViewController {
     
     @objc func addNewProduct() {
         addNewProductButton.addClickAnimation()
+        errorLabel.isHidden = true
+        
+        var errorOccured = false
+        if nameField.textField.text == "" {
+            errorLabel.isHidden = false
+            errorLabel.text = "Please, write the name of a product"
+            return
+        }
+        
+        errorOccured = showErrorLabel(field: caloriesField, nutrientName: "calories")
+        
+        if errorOccured {
+            return
+        }
+        errorOccured = showErrorLabel(field: proteinsField, nutrientName: "proteins")
+        if errorOccured {
+            return
+        }
+        errorOccured = showErrorLabel(field: fatsField, nutrientName: "fats")
+        if errorOccured {
+            return
+        }
+        errorOccured = showErrorLabel(field: carbsField, nutrientName: "carbs")
+        if errorOccured {
+            return
+        }
+        
+        let product = Product(name: nameField.textField.text!, amount: 100, calories: Int(caloriesField.textField.text!)!, proteins: Float(proteinsField.textField.text!)!, fats: Float(fatsField.textField.text!)!, carbs: Float(carbsField.textField.text!)!, measure: measures[measureSegmentedControl.selectedSegmentIndex])
+        
+        
+        
+        NotificationCenter.default.post(name: newProductAdded, object: nil, userInfo: ["product": product])
+        
+    }
+    
+    func showErrorLabel(field: LabelTextFieldView, nutrientName: String) -> Bool {
+        
+        if field.textField.text! == "" {
+            errorLabel.isHidden = false
+            errorLabel.text = "Please, write the \(nutrientName) amount"
+            return true
+        }
+        
+        if Int(field.textField.text!) == nil {
+            errorLabel.isHidden = false
+            errorLabel.text = "Please, write correct value to \(nutrientName) field"
+            return true
+        }
+        
+        return false
     }
 }

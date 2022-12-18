@@ -16,7 +16,7 @@ class AddConsumedProductViewController: UIViewController {
     
     let tableView = UITableView()
     
-    let products = [Product(name: "Rice", amount: 100, calories: 130, proteins: 2.7, fats: 0.3, carbs: 28, measure: .g),
+    var products = [Product(name: "Rice", amount: 100, calories: 130, proteins: 2.7, fats: 0.3, carbs: 28, measure: .g),
                     Product(name: "Chocolate", amount: 100, calories: 500, proteins: 5, fats: 25, carbs: 62, measure: .g),
                     Product(name: "Cheese", amount: 50, calories: 120, proteins: 15, fats: 15, carbs: 45, measure: .g),
                     Product(name: "Milk", amount: 120, calories: 142, proteins: 8, fats: 10, carbs: 20, measure: .ml),
@@ -54,6 +54,8 @@ class AddConsumedProductViewController: UIViewController {
         let plusBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewProductToList))
         
         navigationItem.rightBarButtonItem = plusBarButtonItem
+        
+        registerForNotifications()
     }
     
     func layout() {
@@ -86,6 +88,17 @@ class AddConsumedProductViewController: UIViewController {
         navigationController?.pushViewController(addNewProductVC, animated: false)
     }
     
+    private func registerForNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(newProductAddedToList), name: newProductAdded, object: nil)
+    }
+    
+    @objc func newProductAddedToList(notification: Notification) {
+        let newProduct = notification.userInfo?["product"] as! Product
+        print(newProduct)
+        products.append(newProduct)
+        tableView.reloadData()
+    }
+    
 
 }
 
@@ -103,7 +116,7 @@ extension AddConsumedProductViewController: UITableViewDelegate {
 
 extension AddConsumedProductViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return products.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

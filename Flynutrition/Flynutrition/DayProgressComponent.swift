@@ -18,9 +18,9 @@ class DayProgressComponent: UIView {
     
     let circularProgressStack = makeStackView(axis: .horizontal)
     
-    let proteinsProgressBar = NutrientProgressBarView(nutrientName: "Proteins", requiredAmount: "130")
-    let fatsProgressBar = NutrientProgressBarView(nutrientName: "Fats", requiredAmount: "170")
-    let carbsProgressBar = NutrientProgressBarView(nutrientName: "Carbs", requiredAmount: "200")
+    let proteinsProgressBar = NutrientProgressBarView(nutrientName: "Proteins", requiredAmount: "105")
+    let fatsProgressBar = NutrientProgressBarView(nutrientName: "Fats", requiredAmount: "63")
+    let carbsProgressBar = NutrientProgressBarView(nutrientName: "Carbs", requiredAmount: "140")
     
     let nutrientsStack = makeStackView(axis: .horizontal)
     
