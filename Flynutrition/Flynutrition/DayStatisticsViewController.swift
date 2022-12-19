@@ -30,7 +30,7 @@ class DayStatisticsViewController: UIViewController {
     var consumedProducts: [ConsumedProduct] = [
     ]
     
-    var weight: Double = 70
+    var weight: Double = LocalState.weight
     var dailyRateCalories = 2200
     var dailyWaterRate = 2000
     var dailyProteinRate = 105
@@ -57,23 +57,26 @@ class DayStatisticsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = .systemGray6
         
         print(UIColor.systemGray6.cgColor)
         title = "Today"
         
-        loadProducts()
-  
+        
+        //Initially we need to consider that app will start with 70 kg weight
+        
+        
        
+        
+        loadProducts()
         setup()
+        
+        adjustNutrientsAccrordingToSettings()
+        
         layout()
         registerForNotifications()
         calculateResultAfterFetching()
-        
-    
-        
-//        dayProgressComponent.proteinsProgressBar.consumedAmountLabel.text
+
     }
     
     
@@ -89,6 +92,24 @@ class DayStatisticsViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = false
     }
     
+    //Accordint to mode
+    // We did this because we need to store and adjust it according to settings
+    func adjustNutrientsAccrordingToSettings() {
+        if LocalState.mode == 0 {
+            dailyProteinRate = Int(LocalState.weight * (activeModeMeasures["proteins"] ?? 0))
+            dailyFatsRate = Int(LocalState.weight * (activeModeMeasures["fats"] ?? 0))
+            dailyCarbsRate = Int(LocalState.weight * (activeModeMeasures["carbs"] ?? 0))
+        } else {
+            dailyProteinRate = Int(LocalState.weight * (passiveModeMeasures["proteins"] ?? 0))
+            dailyFatsRate = Int(LocalState.weight * (passiveModeMeasures["fats"] ?? 0))
+            dailyCarbsRate = Int(LocalState.weight * (passiveModeMeasures["carbs"] ?? 0))
+        }
+        
+        dayProgressComponent.proteinsProgressBar.combinedAmountLabel.text =  "0" + "/" + String(dailyProteinRate) + "g"
+        dayProgressComponent.fatsProgressBar.combinedAmountLabel.text = "0" + "/" + String(dailyFatsRate) + "g"
+        dayProgressComponent.carbsProgressBar.combinedAmountLabel.text = "0" + "/" + String(dailyCarbsRate) + "g"
+        
+    }
     
     func setup() {
         todayLabel.font = UIFont.systemFont(ofSize: 30, weight: .bold)
@@ -110,6 +131,9 @@ class DayStatisticsViewController: UIViewController {
         addProductButton.setImage(configuredImage, for: .normal)
         addProductButton.tintColor = .white
         addProductButton.addTarget(self, action: #selector(addProductPressed), for: .primaryActionTriggered)
+
+    
+        
     }
     
     func layout() {
@@ -233,27 +257,29 @@ class DayStatisticsViewController: UIViewController {
         }
     }
     
-    func productFetched(product: ConsumedProduct) {
-        if product.name?.lowercased() == "water" {
-              calculateRemainedCalorieOrWater(newProduct: product)
-              changeWaterProgress(newProduct: product)
-        } else {
-            changeCaloriesProgress(newProduct: product)
-
-            calculateRemainedCalorieOrWater(newProduct: product)
-            
-            calculateRemainedProteinsProgressBar(newProduct: product)
-            calculateRemainedFatsProgressBar(newProduct: product)
-            calculateRemainedCarbsProgressBar(newProduct: product)
-        }
-    }
+   
     
     @objc func changeMode(_ notification: Notification) {
-      
-        weight = notification.userInfo?["weight"] as! Double
+        
+        LocalState.weight = notification.userInfo?["weight"] as! Double
+        print(LocalState.weight)
+        
+        weight = LocalState.weight
+         
+        if notification.userInfo?["proteins"] as! Double == 1.5 {
+            LocalState.mode = 0
+        } else {
+            LocalState.mode = 1
+            print("LocalState to 1")
+        }
+        
+        print(notification.userInfo?["proteins"] as! Double)
+        
         dailyProteinRate = Int(notification.userInfo?["proteins"] as! Double * weight)
         dailyFatsRate = Int(notification.userInfo?["fats"] as! Double * weight)
         dailyCarbsRate = Int(notification.userInfo?["carbs"] as! Double * weight)
+        
+        print(dailyProteinRate)
        
         
         adjustProgressToModeChanging()
@@ -505,6 +531,21 @@ extension DayStatisticsViewController: UITableViewDataSource {
 //MARK: - CoreData functions
 
 extension DayStatisticsViewController {
+    func calculateProductAfterFetching(product: ConsumedProduct) {
+        if product.name?.lowercased() == "water" {
+              calculateRemainedCalorieOrWater(newProduct: product)
+              changeWaterProgress(newProduct: product)
+        } else {
+            changeCaloriesProgress(newProduct: product)
+
+            calculateRemainedCalorieOrWater(newProduct: product)
+            
+            calculateRemainedProteinsProgressBar(newProduct: product)
+            calculateRemainedFatsProgressBar(newProduct: product)
+            calculateRemainedCarbsProgressBar(newProduct: product)
+        }
+    }
+    
     func saveItems() {
         do {
             try context.save()
@@ -529,7 +570,27 @@ extension DayStatisticsViewController {
     func calculateResultAfterFetching() {
         
         for product in consumedProducts {
-            productFetched(product: product)
+            calculateProductAfterFetching(product: product)
+        }
+    }
+}
+
+
+
+//MARK: - Checking date
+extension DayStatisticsViewController {
+    func checkDate() {
+        let date = Date()
+        let calendar = Calendar.current
+        
+        let day = calendar.component(.day, from: date)
+        let month = calendar.component(.month, from: date)
+        
+        print(dailyRateCalories - (Int((dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text?.dropLast(2))!) ?? 0))
+        print(Float(dayProgressComponent.proteinsProgressBar.consumedAmountLabel.text ?? "0") ?? 0)
+        
+        if LocalState.day != day && LocalState.month != month {
+            
         }
     }
 }

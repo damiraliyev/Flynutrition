@@ -104,12 +104,12 @@ class ProductListViewController: UIViewController {
     
     
     func addInitialProducts() {
-        let productNames = ["Potato", "Rice", "Banana"]
-        let productCalories = [77, 130, 89]
-        let productProteins = [2, 2.7, 1.1]
-        let productFats = [0.1, 0.3, 0.3]
-        let productCarbs = [17, 28, 23]
-        let productMeasures = ["g", "g", "g"]
+        let productNames = ["Water", "Potato", "Rice", "Banana"]
+        let productCalories = [0, 77, 130, 89]
+        let productProteins = [0, 2, 2.7, 1.1]
+        let productFats = [0, 0.1, 0.3, 0.3]
+        let productCarbs = [0, 17, 28, 23]
+        let productMeasures = ["ml", "g", "g", "g"]
         
         for i in 0...productNames.count-1 {
             let initialProduct = Product(context: context)

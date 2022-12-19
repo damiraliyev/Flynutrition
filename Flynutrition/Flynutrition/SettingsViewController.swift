@@ -8,7 +8,8 @@
 import Foundation
 import UIKit
 
-
+var activeModeMeasures: [String: Double] = ["proteins": 1.5, "fats": 0.9, "carbs": 2.0]
+var passiveModeMeasures: [String: Double] = ["proteins": 0.8, "fats": 0.7, "carbs": 1.5]
 class SettingsViewController: UIViewController {
     
     let tipLabel = UILabel()
@@ -19,24 +20,22 @@ class SettingsViewController: UIViewController {
     
     let activityModeLabel = UILabel()
     
-    var weight: Double = 70.0
+    var weight: Double = LocalState.weight
     
     var activeMode = ActivityModeView(isOn: true, modeText: "Active mode", id: 0)
     
     var activeModeMeasures: [String: Double] = ["proteins": 1.5, "fats": 0.9, "carbs": 2.0]
-    
+//
     let passiveMode = ActivityModeView(isOn: false, modeText: "Passive mode", id: 1)
-    
-    var passiveModeMeasures: [String: Double] = ["proteins": 0.8, "fats": 0.7, "carbs": 1.5]
-    
+//
+//    var passiveModeMeasures: [String: Double] = ["proteins": 0.8, "fats": 0.7, "carbs": 1.5]
+//    
     let applyButton = makeButton(color: .systemBlue)
     
     let errorLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-       
         view.backgroundColor = .white
         title = "Settings"
         setup()
@@ -79,7 +78,7 @@ class SettingsViewController: UIViewController {
         weightTextField.layer.borderColor = UIColor.black.cgColor
         weightTextField.textAlignment = .center
         weightTextField.backgroundColor = .white
-        weightTextField.text = "70"
+        weightTextField.text = String(weight)
         weightTextField.delegate = self
         weightTextField.addTarget(self, action: #selector(weightTextFieldChanged), for: .editingChanged)
         
@@ -103,6 +102,14 @@ class SettingsViewController: UIViewController {
         errorLabel.textColor = .red
         errorLabel.isHidden = true
         
+        
+        if LocalState.mode == 0 {
+            activeMode.isOnSwitch.isOn = true
+            passiveMode.isOnSwitch.isOn = false
+        } else {
+            activeMode.isOnSwitch.isOn = false
+            passiveMode.isOnSwitch.isOn = true
+        }
     }
     
     
@@ -187,8 +194,15 @@ extension SettingsViewController: SwitchDelegate {
         
         if id == 0 {
             passiveMode.isOnSwitch.isOn = !activeMode.isOnSwitch.isOn
+            
         } else if id == 1 {
             activeMode.isOnSwitch.isOn = !passiveMode.isOnSwitch.isOn
+        }
+        
+        if activeMode.isOnSwitch.isOn {
+            LocalState.mode = 0
+        } else {
+            LocalState.mode = 1
         }
         
     }
@@ -207,13 +221,6 @@ extension SettingsViewController: UITextFieldDelegate {
     }
     
     @objc func weightTextFieldChanged(_ sender: UITextField) {
-        
-//        if sender.text == "" {
-//
-//        } else {
-//            let newWeight = Double(sender.text!) ?? weight
-//            weightTextField.text = String(newWeight)
-//        }
 
     }
 }
