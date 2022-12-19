@@ -529,7 +529,6 @@ extension DayStatisticsViewController {
     func calculateResultAfterFetching() {
         
         for product in consumedProducts {
-            print(product.name)
             productFetched(product: product)
         }
     }

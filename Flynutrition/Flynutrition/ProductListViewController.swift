@@ -19,9 +19,11 @@ class ProductListViewController: UIViewController {
     
     let tableView = UITableView()
     
-    var products: [Product] = [
-    ]
+    var products: [Product] = []
+    
+    let defaults = UserDefaults.standard
         
+    var isLoaded = false
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -35,9 +37,14 @@ class ProductListViewController: UIViewController {
         view.backgroundColor = .systemGray6
         title = "Add products"
         
+        
         loadProducts()
+        
         setup()
         layout()
+        
+        
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
     }
     
     func setup() {
@@ -90,20 +97,38 @@ class ProductListViewController: UIViewController {
     @objc func newProductAddedToList(notification: Notification) {
         let addedNewProduct = notification.userInfo?["product"] as! Product
        
-        
-//        let product = Product(context: context)
-//        product.name = addedNewProduct.name
-//        product.amount = addedNewProduct.amount
-//        product.calories = addedNewProduct.calories
-//        product.proteins = addedNewProduct.proteins
-//        product.fats = addedNewProduct.fats
-//        product.carbs = addedNewProduct.carbs
-//        product.measure = addedNewProduct.measure
-//
         products.append(addedNewProduct)
         saveProduct()
         print(products.count)
     }
+    
+    
+    func addInitialProducts() {
+        let productNames = ["Potato", "Rice", "Banana"]
+        let productCalories = [77, 130, 89]
+        let productProteins = [2, 2.7, 1.1]
+        let productFats = [0.1, 0.3, 0.3]
+        let productCarbs = [17, 28, 23]
+        let productMeasures = ["g", "g", "g"]
+        
+        for i in 0...productNames.count-1 {
+            let initialProduct = Product(context: context)
+            initialProduct.name = productNames[i]
+            initialProduct.amount = 100
+            initialProduct.calories = Int32(productCalories[i])
+            initialProduct.proteins = Float(productProteins[i])
+            initialProduct.fats = Float(productFats[i])
+            initialProduct.carbs = Float(productCarbs[i])
+            initialProduct.measure = productMeasures[i]
+            
+            products.append(initialProduct)
+            saveProduct()
+            
+        }
+        LocalState.hasLoaded = true
+        
+    }
+    
     
 
 }
@@ -185,11 +210,16 @@ extension ProductListViewController {
     
     func loadProducts() {
         let request: NSFetchRequest<Product> = Product.fetchRequest()
-        
+
         do {
             products = try context.fetch(request)
+            
+            if !LocalState.hasLoaded {
+                addInitialProducts()
+            }
         } catch {
             print("Error occured while saving new product: \(error)")
         }
+        tableView.reloadData()
     }
 }
