@@ -32,6 +32,11 @@ class MainTabBarController: UITabBarController {
         let addProductsVC = ProductListViewController()
         addProductsVC.tabBarItem = UITabBarItem(title: "Add", image: UIImage(systemName: "plus"), selectedImage: nil)
         
+        
+        let statisticsVC = StatisticsViewController()
+        statisticsVC.tabBarItem = UITabBarItem(title: "Statistics", image: UIImage(systemName: "doc.plaintext.fill"), selectedImage: nil)
+        let statisticsNC = UINavigationController(rootViewController: statisticsVC)
+        
         let settingsVC = SettingsViewController()
         settingsVC.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(systemName: "staroflife.fill"), selectedImage: nil)
         
@@ -46,7 +51,7 @@ class MainTabBarController: UITabBarController {
 //        tabBarAppearance.backgroundColor = .systemBackground
 //        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
         
-        viewControllers = [dayStatisticsNC, settingsNC]
+        viewControllers = [dayStatisticsNC, statisticsNC, settingsNC]
         
         loadAllControllers()
         

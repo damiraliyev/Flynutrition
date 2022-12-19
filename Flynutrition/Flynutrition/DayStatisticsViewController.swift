@@ -61,12 +61,7 @@ class DayStatisticsViewController: UIViewController {
         
         print(UIColor.systemGray6.cgColor)
         title = "Today"
-        
-        
-        //Initially we need to consider that app will start with 70 kg weight
-        
-        
-       
+
         
         loadProducts()
         setup()

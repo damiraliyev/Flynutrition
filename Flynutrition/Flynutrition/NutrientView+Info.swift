@@ -30,8 +30,8 @@ class NutrientInfo: UIView {
         nutrientImageView.image = UIImage(named: imageName)
         
         nutrientNameLabel.text = name
-        
-        
+        nutrientNameLabel.adjustsFontSizeToFitWidth = true
+        nutrientNameLabel.numberOfLines = 1;
         
         amountLabel.text = String(amount) + "g"
         
