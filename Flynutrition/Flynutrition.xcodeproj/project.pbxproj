@@ -13,6 +13,7 @@
 		6819EF0D294F055400D80F39 /* AddNewProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6819EF0C294F055400D80F39 /* AddNewProductViewController.swift */; };
 		6819EF0F294F061300D80F39 /* LabelTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6819EF0E294F061300D80F39 /* LabelTextFieldView.swift */; };
 		683C70EA294B1D4000009BF8 /* K.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683C70E9294B1D4000009BF8 /* K.swift */; };
+		684E3A20295036B40011ECCD /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 684E3A1E295036B40011ECCD /* DataModel.xcdatamodeld */; };
 		689B2F9A2920B2C100302362 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B2F992920B2C100302362 /* AppDelegate.swift */; };
 		689B2F9E2920B2C100302362 /* DayStatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B2F9D2920B2C100302362 /* DayStatisticsViewController.swift */; };
 		689B2FA32920B2C300302362 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 689B2FA22920B2C300302362 /* Assets.xcassets */; };
@@ -24,7 +25,7 @@
 		689B2FB72920BA0B00302362 /* DayProgressComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B2FB62920BA0B00302362 /* DayProgressComponent.swift */; };
 		689B2FB92920BB3000302362 /* ConsumedProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B2FB82920BB3000302362 /* ConsumedProductCell.swift */; };
 		689B2FBD2920BDCA00302362 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B2FBC2920BDCA00302362 /* MainTabBarController.swift */; };
-		689B2FC12920C08400302362 /* AddConsumedProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B2FC02920C08400302362 /* AddConsumedProductViewController.swift */; };
+		689B2FC12920C08400302362 /* ProductListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B2FC02920C08400302362 /* ProductListViewController.swift */; };
 		689B2FC32920D20300302362 /* AddProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B2FC22920D20300302362 /* AddProductCell.swift */; };
 		68B04D7B29253ECF00C56932 /* ProductInfroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B04D7A29253ECF00C56932 /* ProductInfroViewController.swift */; };
 		68B04D7D2925425000C56932 /* NutrientView+Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B04D7C2925425000C56932 /* NutrientView+Info.swift */; };
@@ -37,6 +38,7 @@
 		6819EF0C294F055400D80F39 /* AddNewProductViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewProductViewController.swift; sourceTree = "<group>"; };
 		6819EF0E294F061300D80F39 /* LabelTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTextFieldView.swift; sourceTree = "<group>"; };
 		683C70E9294B1D4000009BF8 /* K.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = K.swift; sourceTree = "<group>"; };
+		684E3A1F295036B40011ECCD /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		689B2F962920B2C100302362 /* Flynutrition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flynutrition.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		689B2F992920B2C100302362 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		689B2F9D2920B2C100302362 /* DayStatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayStatisticsViewController.swift; sourceTree = "<group>"; };
@@ -50,7 +52,7 @@
 		689B2FB62920BA0B00302362 /* DayProgressComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayProgressComponent.swift; sourceTree = "<group>"; };
 		689B2FB82920BB3000302362 /* ConsumedProductCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumedProductCell.swift; sourceTree = "<group>"; };
 		689B2FBC2920BDCA00302362 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
-		689B2FC02920C08400302362 /* AddConsumedProductViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddConsumedProductViewController.swift; sourceTree = "<group>"; };
+		689B2FC02920C08400302362 /* ProductListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListViewController.swift; sourceTree = "<group>"; };
 		689B2FC22920D20300302362 /* AddProductCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProductCell.swift; sourceTree = "<group>"; };
 		68B04D7A29253ECF00C56932 /* ProductInfroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductInfroViewController.swift; sourceTree = "<group>"; };
 		68B04D7C2925425000C56932 /* NutrientView+Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NutrientView+Info.swift"; sourceTree = "<group>"; };
@@ -87,9 +89,10 @@
 			isa = PBXGroup;
 			children = (
 				689B2F992920B2C100302362 /* AppDelegate.swift */,
+				684E3A1E295036B40011ECCD /* DataModel.xcdatamodeld */,
 				689B2FBC2920BDCA00302362 /* MainTabBarController.swift */,
 				689B2F9D2920B2C100302362 /* DayStatisticsViewController.swift */,
-				689B2FC02920C08400302362 /* AddConsumedProductViewController.swift */,
+				689B2FC02920C08400302362 /* ProductListViewController.swift */,
 				6819EF0C294F055400D80F39 /* AddNewProductViewController.swift */,
 				6819EF0E294F061300D80F39 /* LabelTextFieldView.swift */,
 				68B04D7A29253ECF00C56932 /* ProductInfroViewController.swift */,
@@ -207,7 +210,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				689B2FC32920D20300302362 /* AddProductCell.swift in Sources */,
-				689B2FC12920C08400302362 /* AddConsumedProductViewController.swift in Sources */,
+				684E3A20295036B40011ECCD /* DataModel.xcdatamodeld in Sources */,
+				689B2FC12920C08400302362 /* ProductListViewController.swift in Sources */,
 				689B2FB32920B9C200302362 /* NutrientCircularProgressView.swift in Sources */,
 				683C70EA294B1D4000009BF8 /* K.swift in Sources */,
 				68B04D7D2925425000C56932 /* NutrientView+Info.swift in Sources */,
@@ -436,6 +440,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		684E3A1E295036B40011ECCD /* DataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				684E3A1F295036B40011ECCD /* DataModel.xcdatamodel */,
+			);
+			currentVersion = 684E3A1F295036B40011ECCD /* DataModel.xcdatamodel */;
+			path = DataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 689B2F8E2920B2C100302362 /* Project object */;
 }

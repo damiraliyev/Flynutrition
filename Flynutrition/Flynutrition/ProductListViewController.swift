@@ -7,8 +7,11 @@
 
 import Foundation
 import UIKit
+import CoreData
 
-class AddConsumedProductViewController: UIViewController {
+class ProductListViewController: UIViewController {
+    
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     var searchController = UISearchController()
     
@@ -16,17 +19,7 @@ class AddConsumedProductViewController: UIViewController {
     
     let tableView = UITableView()
     
-    var products = [Product(name: "Rice", amount: 100, calories: 130, proteins: 2.7, fats: 0.3, carbs: 28, measure: .g),
-                    Product(name: "Chocolate", amount: 100, calories: 500, proteins: 5, fats: 25, carbs: 62, measure: .g),
-                    Product(name: "Cheese", amount: 50, calories: 120, proteins: 15, fats: 15, carbs: 45, measure: .g),
-                    Product(name: "Milk", amount: 120, calories: 142, proteins: 8, fats: 10, carbs: 20, measure: .ml),
-                    Product(name: "Water", amount: 120, calories: 0, proteins: 0, fats: 0, carbs: 0, measure: .ml),
-                    Product(name: "Potato", amount: 150, calories: 400, proteins: 12, fats: 23, carbs: 65, measure: .g),
-                    Product(name: "Rice", amount: 100, calories: 130, proteins: 2.7, fats: 0.3, carbs: 28, measure: .g),
-                    Product(name: "Chocolate", amount: 100, calories: 500, proteins: 5, fats: 25, carbs: 62, measure: .g),
-                    Product(name: "Cheese", amount: 50, calories: 120, proteins: 15, fats: 15, carbs: 45, measure: .g),
-                    Product(name: "Milk", amount: 120, calories: 142, proteins: 8, fats: 10, carbs: 20, measure: .ml),
-                    Product(name: "Potato", amount: 150, calories: 400, proteins: 12, fats: 23, carbs: 65, measure: .g)
+    var products: [Product] = [
     ]
         
 
@@ -102,7 +95,7 @@ class AddConsumedProductViewController: UIViewController {
 
 }
 
-extension AddConsumedProductViewController: UITableViewDelegate {
+extension ProductListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let productInfoVC = ProductInfoViewController()
         
@@ -114,7 +107,7 @@ extension AddConsumedProductViewController: UITableViewDelegate {
     }
 }
 
-extension AddConsumedProductViewController: UITableViewDataSource {
+extension ProductListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return products.count
     }
@@ -124,11 +117,26 @@ extension AddConsumedProductViewController: UITableViewDataSource {
         cell.configureProductCell(product: products[indexPath.row])
         return cell
     }
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            
+            if products[indexPath.row].name.lowercased() == "water" {
+                return
+            }
+            
+            products.remove(at: indexPath.row)
+            tableView.reloadData()
+        }
+    }
     
     
 }
 
-extension AddConsumedProductViewController: UISearchResultsUpdating {
+extension ProductListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         
     }
@@ -136,7 +144,7 @@ extension AddConsumedProductViewController: UISearchResultsUpdating {
     
 }
 
-extension AddConsumedProductViewController: UISearchControllerDelegate {
+extension ProductListViewController: UISearchControllerDelegate {
     
     
     public func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -144,6 +152,22 @@ extension AddConsumedProductViewController: UISearchControllerDelegate {
     }
 }
 
-extension AddConsumedProductViewController: UISearchBarDelegate {
+extension ProductListViewController: UISearchBarDelegate {
     
+}
+
+//MARK: - CoreData functions
+
+extension ProductListViewController {
+    func saveProduct() {
+        do {
+            try context.save()
+        } catch {
+            print("Error occured while saving new product: \(error)")
+        }
+    }
+    
+    func loadProducts() {
+        let request: NSFetchRequest<Product> = Product.fetchRequest()
+    }
 }

@@ -154,6 +154,9 @@ class AddNewProductViewController: UIViewController {
         
         NotificationCenter.default.post(name: newProductAdded, object: nil, userInfo: ["product": product])
         
+        
+        navigationController?.popViewController(animated: true)
+        
     }
     
     func showErrorLabel(field: LabelTextFieldView, nutrientName: String) -> Bool {

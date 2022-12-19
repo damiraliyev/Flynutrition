@@ -29,7 +29,7 @@ class MainTabBarController: UITabBarController {
         dayStatisticsNC.navigationBar.prefersLargeTitles = true
         
         
-        let addProductsVC = AddConsumedProductViewController()
+        let addProductsVC = ProductListViewController()
         addProductsVC.tabBarItem = UITabBarItem(title: "Add", image: UIImage(systemName: "plus"), selectedImage: nil)
         
         let settingsVC = SettingsViewController()

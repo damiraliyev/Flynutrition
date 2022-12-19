@@ -6,9 +6,11 @@
 //
 
 import UIKit
-
+import CoreData
 
 class DayStatisticsViewController: UIViewController {
+    
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     let todayLabel = makeLabel(withText: "Today")
     
@@ -25,7 +27,7 @@ class DayStatisticsViewController: UIViewController {
     let addProductButton = makeButton(color: .systemBlue)
     
     
-    var consumedProducts: [Product] = [
+    var consumedProducts: [ConsumedProduct] = [
     ]
     
     var weight: Double = 70
@@ -55,22 +57,31 @@ class DayStatisticsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-//        view.backgroundColor = UIColor(red: 0.94902, green: 0.94902, blue: 0.968627, alpha: 1)
+
         view.backgroundColor = .systemGray6
         
         print(UIColor.systemGray6.cgColor)
         title = "Today"
+        
+        loadProducts()
+  
+       
         setup()
         layout()
         registerForNotifications()
+        calculateResultAfterFetching()
+        
+    
         
 //        dayProgressComponent.proteinsProgressBar.consumedAmountLabel.text
     }
     
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.prefersLargeTitles = true
+//        calculateResultAfterFetching()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -171,7 +182,7 @@ class DayStatisticsViewController: UIViewController {
     }
     
     @objc func addProductPressed() {
-        let addProductsViewController = AddConsumedProductViewController()
+        let addProductsViewController = ProductListViewController()
         addProductsViewController.navigationController?.navigationItem.searchController = UISearchController()
         navigationController?.pushViewController(addProductsViewController, animated: false)
     }
@@ -191,11 +202,24 @@ class DayStatisticsViewController: UIViewController {
         let carbs = notification.userInfo?["carbs"] as! Float
         let measure = notification.userInfo?["measure"] as! Measure
         
-        let newConsumedProduct = Product(name: name, amount: amount ?? 0, calories: calories ?? 0, proteins: proteins, fats: fats, carbs: carbs, measure: measure)
-        consumedProducts.insert(newConsumedProduct, at: 0)
-        dayTableView.reloadData()
+//        let newConsumedProduct = Product(name: name, amount: amount ?? 0, calories: calories ?? 0, proteins: proteins, fats: fats, carbs: carbs, measure: measure)
+//        consumedProducts.insert(newConsumedProduct, at: 0)
+//        dayTableView.reloadData()
         
-        if newConsumedProduct.name.lowercased() == "water" {
+        let newConsumedProduct = ConsumedProduct(context: context)
+        newConsumedProduct.name = name
+        newConsumedProduct.amount = Int32(amount ?? 0)
+        newConsumedProduct.calories = Int32(calories ?? 0)
+        newConsumedProduct.proteins = proteins
+        newConsumedProduct.fats = fats
+        newConsumedProduct.carbs = carbs
+        newConsumedProduct.measure = measure.rawValue
+        
+        consumedProducts.insert(newConsumedProduct, at: 0)
+        saveItems()
+        
+        
+        if newConsumedProduct.name?.lowercased() == "water" {
               calculateRemainedCalorieOrWater(newProduct: newConsumedProduct)
               changeWaterProgress(newProduct: newConsumedProduct)
         } else {
@@ -206,6 +230,21 @@ class DayStatisticsViewController: UIViewController {
             calculateRemainedProteinsProgressBar(newProduct: newConsumedProduct)
             calculateRemainedFatsProgressBar(newProduct: newConsumedProduct)
             calculateRemainedCarbsProgressBar(newProduct: newConsumedProduct)
+        }
+    }
+    
+    func productFetched(product: ConsumedProduct) {
+        if product.name?.lowercased() == "water" {
+              calculateRemainedCalorieOrWater(newProduct: product)
+              changeWaterProgress(newProduct: product)
+        } else {
+            changeCaloriesProgress(newProduct: product)
+
+            calculateRemainedCalorieOrWater(newProduct: product)
+            
+            calculateRemainedProteinsProgressBar(newProduct: product)
+            calculateRemainedFatsProgressBar(newProduct: product)
+            calculateRemainedCarbsProgressBar(newProduct: product)
         }
     }
     
@@ -239,11 +278,11 @@ class DayStatisticsViewController: UIViewController {
         
     }
     
-    func changeCaloriesProgress(newProduct: Product) {
+    func changeCaloriesProgress(newProduct: ConsumedProduct) {
         dayProgressComponent.calorieProgressView.progress += Float(newProduct.calories) / Float(dailyRateCalories)
     }
     
-    func changeWaterProgress(newProduct: Product) {
+    func changeWaterProgress(newProduct: ConsumedProduct) {
         dayProgressComponent.waterProgressView.progress += Float(newProduct.amount) / Float(dailyWaterRate)
     }
     
@@ -251,14 +290,14 @@ class DayStatisticsViewController: UIViewController {
     //Calculate when product is added
     //Calories and Water
 
-    func calculateRemainedCalorieOrWater(newProduct: Product) {
+    func calculateRemainedCalorieOrWater(newProduct: ConsumedProduct) {
         print("CalculateRemainedCalorieOrWater")
         var progressComponent = dayProgressComponent.caloriesProgressComponent
         var measure = "kC"
        
         var addedAmount = newProduct.calories
         var textAfterReaching = "extra"
-        if newProduct.name.lowercased() == "water" {
+        if newProduct.name?.lowercased() == "water" {
             progressComponent = dayProgressComponent.waterProgressComponent
             addedAmount = newProduct.amount
             measure = "ml"
@@ -279,7 +318,7 @@ class DayStatisticsViewController: UIViewController {
         
     }
     
-    func calculateRemainedProteinsProgressBar(newProduct: Product) {
+    func calculateRemainedProteinsProgressBar(newProduct: ConsumedProduct) {
         print("calculateRemainedProteinsProgressBar")
         dayProgressComponent.proteinsProgressBar.progressBar.progress += round(newProduct.proteins / Float(dailyProteinRate) * 10000) / 10000
         
@@ -288,7 +327,7 @@ class DayStatisticsViewController: UIViewController {
         recalculateNutrients(currentProduct: newProduct, operation: .add, nutrient: .proteins)
     }
     
-    func calculateRemainedFatsProgressBar(newProduct: Product) {
+    func calculateRemainedFatsProgressBar(newProduct: ConsumedProduct) {
         print("calculateRemainedFatsProgressBar")
         dayProgressComponent.fatsProgressBar.progressBar.progress += round(newProduct.fats / Float(dailyFatsRate) * 10000) / 10000
         
@@ -297,7 +336,7 @@ class DayStatisticsViewController: UIViewController {
         recalculateNutrients(currentProduct: newProduct, operation: .add, nutrient: .fats)
     }
     
-    func calculateRemainedCarbsProgressBar(newProduct: Product) {
+    func calculateRemainedCarbsProgressBar(newProduct: ConsumedProduct) {
         print("calculateRemainedCarbsProgressBar")
         dayProgressComponent.carbsProgressBar.progressBar.progress += round(newProduct.carbs / Float(dailyCarbsRate) * 10000) / 10000
         
@@ -333,10 +372,10 @@ extension DayStatisticsViewController: UITableViewDelegate {
             
             guard let remainTextWater = dayProgressComponent.waterProgressComponent.elementRemainLabel.text?.dropLast(2) else { return }
             print("RemainText", remainText)
-            let remainAmountCalorie = (Int(remainText) ?? 0) + currentProduct.calories
+            let remainAmountCalorie = (Int32(remainText) ?? 0) + currentProduct.calories
             print(remainAmountCalorie)
-            if  currentProduct.name.lowercased() == "water" {
-                let remainAmountWater = (Int(remainTextWater) ?? 0) + currentProduct.amount
+            if  currentProduct.name?.lowercased() == "water" {
+                let remainAmountWater = (Int32(remainTextWater) ?? 0) + currentProduct.amount
                 changeTextBasedOnRemainder(remainAmount: remainAmountWater, isWater: true)
                 dayProgressComponent.waterProgressComponent.elementRemainLabel.text = String(remainAmountWater) + "ml"
             }
@@ -348,14 +387,17 @@ extension DayStatisticsViewController: UITableViewDelegate {
             dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text = String(remainAmountCalorie) + "kC"
             
             
+            context.delete(consumedProducts[indexPath.row])
             consumedProducts.remove(at: indexPath.row)
+            
+            saveItems()
            
-            tableView.reloadData()
+//            tableView.reloadData()
             
         }
     }
     
-    func changeTextBasedOnRemainder(remainAmount: Int, isWater: Bool) {
+    func changeTextBasedOnRemainder(remainAmount: Int32, isWater: Bool) {
         var textAfterReaching: String
         var component: NutrientCircularProgressView = dayProgressComponent.caloriesProgressComponent
         
@@ -375,7 +417,7 @@ extension DayStatisticsViewController: UITableViewDelegate {
         
     }
     
-    func recalculateProgressAfterDeleting(currentProduct: Product) {
+    func recalculateProgressAfterDeleting(currentProduct: ConsumedProduct) {
         
         print("Product was deleted and nutrients will be recalculated")
         progressBarProteinTracker -= round(Float(currentProduct.proteins) / Float(dailyProteinRate) * 10000) / 10000
@@ -412,7 +454,7 @@ extension DayStatisticsViewController: UITableViewDelegate {
     }
     
     
-    func recalculateNutrients(currentProduct: Product, operation: Operations, nutrient: Nutrients) {
+    func recalculateNutrients(currentProduct: ConsumedProduct, operation: Operations, nutrient: Nutrients) {
         var consumedNutrientAmountBar: NutrientProgressBarView
         var consumedNutrientAmount: Float
         var newValue: String
@@ -456,5 +498,38 @@ extension DayStatisticsViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: ConsumedProductCell.reuseID, for: indexPath) as! ConsumedProductCell
         cell.configureConsumedCell(consumedProduct: consumedProducts[indexPath.row])
         return cell
+    }
+}
+
+
+//MARK: - CoreData functions
+
+extension DayStatisticsViewController {
+    func saveItems() {
+        do {
+            try context.save()
+        } catch {
+            print("Error occured while saving context: \(error)")
+        }
+        
+        dayTableView.reloadData()
+    }
+    
+    func loadProducts() {
+        let request: NSFetchRequest<ConsumedProduct> = ConsumedProduct.fetchRequest()
+        
+        do {
+            consumedProducts = try context.fetch(request)
+        } catch {
+            print("Error occured while loading context: \(error)")
+        }
+    }
+    
+    func calculateResultAfterFetching() {
+        
+        for product in consumedProducts {
+            print(product.name)
+            productFetched(product: product)
+        }
     }
 }
