@@ -200,7 +200,7 @@ class DayStatisticsViewController: UIViewController {
         let proteins = notification.userInfo?["proteins"] as! Float
         let fats = notification.userInfo?["fats"] as! Float
         let carbs = notification.userInfo?["carbs"] as! Float
-        let measure = notification.userInfo?["measure"] as! Measure
+        let measure = notification.userInfo?["measure"] as! String
         
 //        let newConsumedProduct = Product(name: name, amount: amount ?? 0, calories: calories ?? 0, proteins: proteins, fats: fats, carbs: carbs, measure: measure)
 //        consumedProducts.insert(newConsumedProduct, at: 0)
@@ -213,7 +213,7 @@ class DayStatisticsViewController: UIViewController {
         newConsumedProduct.proteins = proteins
         newConsumedProduct.fats = fats
         newConsumedProduct.carbs = carbs
-        newConsumedProduct.measure = measure.rawValue
+        newConsumedProduct.measure = measure
         
         consumedProducts.insert(newConsumedProduct, at: 0)
         saveItems()
@@ -520,6 +520,7 @@ extension DayStatisticsViewController {
         
         do {
             consumedProducts = try context.fetch(request)
+            consumedProducts = consumedProducts.reversed()
         } catch {
             print("Error occured while loading context: \(error)")
         }

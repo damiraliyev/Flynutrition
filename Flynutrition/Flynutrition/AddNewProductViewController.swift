@@ -7,8 +7,11 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 class AddNewProductViewController: UIViewController {
+    
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     let fieldsStackView = makeStackView(axis: .vertical)
     
@@ -148,7 +151,16 @@ class AddNewProductViewController: UIViewController {
             return
         }
         
-        let product = Product(name: nameField.textField.text!, amount: 100, calories: Int(caloriesField.textField.text!)!, proteins: Float(proteinsField.textField.text!)!, fats: Float(fatsField.textField.text!)!, carbs: Float(carbsField.textField.text!)!, measure: measures[measureSegmentedControl.selectedSegmentIndex])
+        let product = Product(context: context)
+        product.name = nameField.textField.text!
+        product.amount = 100
+        product.calories = Int32(caloriesField.textField.text!)!
+        product.proteins = Float(proteinsField.textField.text!)!
+        product.fats = Float(fatsField.textField.text!)!
+        product.carbs = Float(carbsField.textField.text!)!
+        product.measure = measures[measureSegmentedControl.selectedSegmentIndex].rawValue
+//
+//        let product = Product(name: nameField.textField.text!, amount: 100, calories: Int(caloriesField.textField.text!)!, proteins: Float(proteinsField.textField.text!)!, fats: Float(fatsField.textField.text!)!, carbs: Float(carbsField.textField.text!)!, measure: measures[measureSegmentedControl.selectedSegmentIndex])
         
         
         

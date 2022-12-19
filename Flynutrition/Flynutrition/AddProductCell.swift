@@ -24,7 +24,7 @@ class AddProductCell: UITableViewCell {
     var proteins: Float = 0.0
     var fats: Float = 0.0
     var carbs: Float = 0.0
-    var measurement: Measure = .g
+    var measurement: String = Measure.g.rawValue
     
     var completionHandler: ((Product) -> Void)?
     
@@ -116,11 +116,11 @@ class AddProductCell: UITableViewCell {
     func configureProductCell(product: Product) {
         productNameLabel.text = product.name
         calorieAmountLabel.text = String(product.calories) + "kC"
-        amountLabel.text = String(product.amount) + product.measure.rawValue
+        amountLabel.text = String(product.amount) + (product.measure ?? "g")
         proteins = product.proteins
         fats = product.fats
         carbs = product.carbs
-        measurement = product.measure        
+        measurement = product.measure ?? "g"
     }
     
     @objc func addPressed(sender: UIButton) {

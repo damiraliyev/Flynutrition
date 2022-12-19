@@ -25,7 +25,7 @@ class ProductInfoViewController: UIViewController {
     
     
     let massLabel = UILabel()
-    var measure: Measure = .g
+    var measure: String = Measure.g.rawValue
     
     
     let amountTextField = UITextField()
@@ -33,9 +33,9 @@ class ProductInfoViewController: UIViewController {
     
     let addButton = makeButton(color: .systemBlue)
     
-    var amount: Int = 0
+    var amount: Int32 = 0
    
-    var caloriesAmount: Int = 0
+    var caloriesAmount: Int32 = 0
     var proteinsAmount: Float = 0
     var fatsAmount: Float = 0
     var carbsAmount: Float = 0
@@ -88,7 +88,7 @@ class ProductInfoViewController: UIViewController {
         
 //        measure = "g"
         
-        massLabel.text = massLabel.text! + "(\(measure.rawValue))"
+        massLabel.text = massLabel.text! + "(\(measure))"
         
         
         amountTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -201,13 +201,13 @@ class ProductInfoViewController: UIViewController {
     }
     
     func configureProductInfo(product: Product) {
-       productName = product.name
+        productName = product.name ?? ""
        amountTextField.text = String(product.amount)
         calorieAmountLabel.text = String(product.calories) + "kC"
         proteins.amountLabel.text = String(product.proteins) + "g"
         fats.amountLabel.text = String(product.fats) + "g"
         carbs.amountLabel.text = String(product.carbs) + "g"
-        measure = product.measure
+        measure = product.measure ?? "g"
         
         caloriesAmount = product.calories
         proteinsAmount = product.proteins
@@ -249,12 +249,12 @@ extension ProductInfoViewController: UITextFieldDelegate {
         //Change the amount if value was changed
         //Decided to put amountTextField.text value instead of amount, because intially there was the first one
         // And initally amountTextField.text will be displayed and I decided leave it it like this
-        amount = Int(sender.text ?? "") ?? 0
+        amount = Int32(Int(sender.text ?? "") ?? 0)
         amountTextField.text = String(amount)
         print("Amount", amount)
         print(Int(sender.text ?? ""))
         
-        caloriesAmount = (amount * initialCalories) / 100
+        caloriesAmount = (amount * Int32(initialCalories)) / 100
         proteinsAmount = round((Float(amount) * initialProteins) / 100 * 10) / 10
         fatsAmount = round((Float(amount) * initialFats) / 100 * 10) / 10
         carbsAmount = round((Float(amount) * initialCarbs) / 100 * 10) / 10

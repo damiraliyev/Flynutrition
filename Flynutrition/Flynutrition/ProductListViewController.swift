@@ -34,6 +34,8 @@ class ProductListViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemGray6
         title = "Add products"
+        
+        loadProducts()
         setup()
         layout()
     }
@@ -86,10 +88,21 @@ class ProductListViewController: UIViewController {
     }
     
     @objc func newProductAddedToList(notification: Notification) {
-        let newProduct = notification.userInfo?["product"] as! Product
-        print(newProduct)
-        products.append(newProduct)
-        tableView.reloadData()
+        let addedNewProduct = notification.userInfo?["product"] as! Product
+       
+        
+//        let product = Product(context: context)
+//        product.name = addedNewProduct.name
+//        product.amount = addedNewProduct.amount
+//        product.calories = addedNewProduct.calories
+//        product.proteins = addedNewProduct.proteins
+//        product.fats = addedNewProduct.fats
+//        product.carbs = addedNewProduct.carbs
+//        product.measure = addedNewProduct.measure
+//
+        products.append(addedNewProduct)
+        saveProduct()
+        print(products.count)
     }
     
 
@@ -124,11 +137,13 @@ extension ProductListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
-            if products[indexPath.row].name.lowercased() == "water" {
+            if products[indexPath.row].name?.lowercased() == "water" {
                 return
             }
-            
+            context.delete(products[indexPath.row])
             products.remove(at: indexPath.row)
+            
+            saveProduct()
             tableView.reloadData()
         }
     }
@@ -165,9 +180,16 @@ extension ProductListViewController {
         } catch {
             print("Error occured while saving new product: \(error)")
         }
+        tableView.reloadData()
     }
     
     func loadProducts() {
         let request: NSFetchRequest<Product> = Product.fetchRequest()
+        
+        do {
+            products = try context.fetch(request)
+        } catch {
+            print("Error occured while saving new product: \(error)")
+        }
     }
 }
