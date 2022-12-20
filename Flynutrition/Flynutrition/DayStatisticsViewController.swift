@@ -389,40 +389,7 @@ extension DayStatisticsViewController: UITableViewDelegate {
         if editingStyle == .delete {
             
             processAfterDeletingConsumedProduct(index: indexPath.row)
-//            let currentProduct = consumedProducts[indexPath.row]
-//
-//            dayProgressComponent.calorieProgressView.progress -= Float(currentProduct.calories) / Float(dailyRateCalories)
-//
-//            dayProgressComponent.waterProgressView.progress -= Float(currentProduct.amount) / Float(dailyWaterRate)
-//
-//           recalculateProgressAfterDeleting(currentProduct: currentProduct)
-//
-//
-//            guard let remainText = dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text?.dropLast(2) else { return }
-//
-//            guard let remainTextWater = dayProgressComponent.waterProgressComponent.elementRemainLabel.text?.dropLast(2) else { return }
-//            print("RemainText", remainText)
-//            let remainAmountCalorie = (Int32(remainText) ?? 0) + currentProduct.calories
-//            print(remainAmountCalorie)
-//            if  currentProduct.name?.lowercased() == "water" {
-//                let remainAmountWater = (Int32(remainTextWater) ?? 0) + currentProduct.amount
-//                changeTextBasedOnRemainder(remainAmount: remainAmountWater, isWater: true)
-//                dayProgressComponent.waterProgressComponent.elementRemainLabel.text = String(remainAmountWater) + "ml"
-//            }
-//
-//
-//            changeTextBasedOnRemainder(remainAmount: remainAmountCalorie, isWater: false)
-//
-//
-//            dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text = String(remainAmountCalorie) + "kC"
-//
-//
-//            context.delete(consumedProducts[indexPath.row])
-//            consumedProducts.remove(at: indexPath.row)
-//
-//            saveItems()
 
-            
         }
     }
     

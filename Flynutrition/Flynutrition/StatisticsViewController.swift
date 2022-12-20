@@ -17,21 +17,24 @@ class StatisticsViewController: UIViewController {
     
     var dailyStatictics: [DailyStatistics] = []
     
+    let stackView = makeStackView(axis: .vertical)
+    let familiarizationLabel = UILabel()
+    let statisticsImageView = UIImageView(image: UIImage(systemName: "doc.plaintext"))
     
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Statistics"
         view.backgroundColor = .white
-        loadStatistics()
-        setup()
-        layout()
         
        
+        
+        
+        loadStatistics()
+        setup()
+        showLabelOrNot()
+        layout()
         allowOnly7Items()
-        
-        
-//        registerForNotifications()
-        print(dailyStatictics.count)
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,10 +51,26 @@ class StatisticsViewController: UIViewController {
         
         tableView.register(StatisticCell.self, forCellReuseIdentifier: StatisticCell.reuseID)
         tableView.rowHeight = 125
+        
+        familiarizationLabel.translatesAutoresizingMaskIntoConstraints = false
+        familiarizationLabel.alpha = 0.5
+        familiarizationLabel.text = "Your weekly statistics will be displayed here. This is your first day of using our app, so it's empty for now."
+        familiarizationLabel.font = UIFont.systemFont(ofSize: 22)
+        familiarizationLabel.numberOfLines = 0
+        familiarizationLabel.textAlignment = .center
+        
+        statisticsImageView.translatesAutoresizingMaskIntoConstraints = false
+        statisticsImageView.alpha = 0.3
+        statisticsImageView.tintColor = .black
+
+
+    
     }
     
     private func layout() {
         view.addSubview(tableView)
+        view.addSubview(familiarizationLabel)
+        view.addSubview(statisticsImageView)
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -59,6 +78,35 @@ class StatisticsViewController: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
+
+        NSLayoutConstraint.activate([
+            familiarizationLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+            familiarizationLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
+            familiarizationLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -64)
+        ])
+        
+        NSLayoutConstraint.activate([
+            statisticsImageView.topAnchor.constraint(equalTo: familiarizationLabel.bottomAnchor, constant: 8),
+            statisticsImageView.centerXAnchor.constraint(equalTo: familiarizationLabel.centerXAnchor),
+            statisticsImageView.widthAnchor.constraint(equalToConstant: 100),
+            statisticsImageView.heightAnchor.constraint(equalToConstant: 75)
+        ])
+        
+        
+    }
+    
+    
+    func showLabelOrNot() {
+        if dailyStatictics.count == 0 {
+            familiarizationLabel.isHidden = false
+            statisticsImageView.isHidden = false
+            print("A")
+        } else {
+            print("Not zero")
+            familiarizationLabel.isHidden = true
+            statisticsImageView.isHidden = true
+            
+        }
     }
     
 }
