@@ -10,3 +10,5 @@ import Foundation
 let modeChanged =  Notification.Name("ModeChanged") 
 
 let newProductAdded = Notification.Name("newProductAddedToList")
+
+let addToStatistics = Notification.Name("addToStatistics")

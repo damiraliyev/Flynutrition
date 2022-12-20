@@ -36,6 +36,7 @@ class MainTabBarController: UITabBarController {
         let statisticsVC = StatisticsViewController()
         statisticsVC.tabBarItem = UITabBarItem(title: "Statistics", image: UIImage(systemName: "doc.plaintext.fill"), selectedImage: nil)
         let statisticsNC = UINavigationController(rootViewController: statisticsVC)
+        dayStatisticsVC.statisticsDelegate = statisticsVC
         
         let settingsVC = SettingsViewController()
         settingsVC.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(systemName: "staroflife.fill"), selectedImage: nil)

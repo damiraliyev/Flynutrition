@@ -27,6 +27,18 @@ public class LocalState {
     
     public static var day: Int {
         get {
+            
+            
+            if UserDefaults.standard.integer(forKey: Keys.day.rawValue) == 0 {
+                let date = Date()
+                let calendar = Calendar.current
+                
+                let day = calendar.component(.day, from: date)
+                let month = calendar.component(.month, from: date)
+                return day
+            }
+        
+            
             return UserDefaults.standard.integer(forKey: Keys.day.rawValue)
         }
         
@@ -37,6 +49,15 @@ public class LocalState {
     
     public static var month: Int {
         get {
+            if UserDefaults.standard.integer(forKey: Keys.month.rawValue) == 0 {
+                let date = Date()
+                let calendar = Calendar.current
+                
+                let day = calendar.component(.day, from: date)
+                let month = calendar.component(.month, from: date)
+                return month
+            }
+            
             return UserDefaults.standard.integer(forKey: Keys.month.rawValue)
         }
         

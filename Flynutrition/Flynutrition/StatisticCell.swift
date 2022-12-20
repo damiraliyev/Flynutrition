@@ -113,12 +113,39 @@ class StatisticCell: UITableViewCell {
         
 
         NSLayoutConstraint.activate([
-            nutrientsStackView.leadingAnchor.constraint(equalTo: dateStackView.trailingAnchor, constant: 16),
+            nutrientsStackView.leadingAnchor.constraint(equalTo: dateStackView.trailingAnchor, constant: 18),
             nutrientsStackView.centerYAnchor.constraint(equalTo: dateStackView.centerYAnchor),
             nutrientsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8)
         ])
 
         
+    }
+    
+    func configureStatisticsCell(statistics: DailyStatistic) {
+        dayLabel.text = String(statistics.day)
+        
+        switch statistics.month {
+        case 1: monthLabel.text = "Jan"
+        case 2: monthLabel.text = "Feb"
+        case 3: monthLabel.text = "Mar"
+        case 4: monthLabel.text = "April"
+        case 5: monthLabel.text = "May"
+        case 6: monthLabel.text = "Jun"
+        case 7: monthLabel.text = "Jul"
+        case 8: monthLabel.text = "Aug"
+        case 9: monthLabel.text = "Sep"
+        case 10: monthLabel.text = "Oct"
+        case 11: monthLabel.text = "Nove"
+        case 12: monthLabel.text = "Dec"
+        default:
+            print("Something went wrong")
+        }
+        
+        proteinNutrientView.amountLabel.text = String(statistics.proteins) + "g"
+        carbsNutrientView.amountLabel.text = String(statistics.fats) + "g"
+        fatsNutrientView.amountLabel.text = String(statistics.carbs) + "g"
+        caloriesNutrientView.amountLabel.text = String(statistics.calories) + "kC"
+        waterNutrientView.amountLabel.text = String(statistics.water) + "ml"
     }
     
     required init?(coder: NSCoder) {

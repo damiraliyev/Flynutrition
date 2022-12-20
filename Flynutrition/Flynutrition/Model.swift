@@ -22,3 +22,13 @@ enum Measure: String {
 //    let carbs: Float
 //    let measure: Measure
 //}
+
+struct DailyStatistic {
+    let day: Int
+    let month: Int
+    let calories: Int
+    let water: Int
+    let proteins: Float
+    let fats: Float
+    let carbs: Float
+}
