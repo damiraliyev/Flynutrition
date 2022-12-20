@@ -43,6 +43,7 @@ class ProductListViewController: UIViewController {
         setup()
         layout()
         
+        searchController.searchBar.delegate = self
         
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
     }
@@ -187,13 +188,28 @@ extension ProductListViewController: UISearchResultsUpdating {
 extension ProductListViewController: UISearchControllerDelegate {
     
     
-    public func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        tableView.reloadData()
-    }
+    
 }
 
 extension ProductListViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text! == "" {
+            loadProducts()
+            
+        } else {
+            let request: NSFetchRequest<Product> = Product.fetchRequest()
+            request.predicate = NSPredicate(format: "name CONTAINS[cd] %@", searchBar.text!)
+            request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+            
+            loadProducts(with: request)
+            
+        }
+    }
     
+    public func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        loadProducts()
+        tableView.reloadData()
+    }
 }
 
 //MARK: - CoreData functions
@@ -208,18 +224,21 @@ extension ProductListViewController {
         tableView.reloadData()
     }
     
-    func loadProducts() {
-        let request: NSFetchRequest<Product> = Product.fetchRequest()
+    func loadProducts(with request: NSFetchRequest<Product> = Product.fetchRequest()) {
+//        let request: NSFetchRequest<Product> = Product.fetchRequest()
 
+        
         do {
             products = try context.fetch(request)
             
             if !LocalState.hasLoaded {
                 addInitialProducts()
             }
+            
         } catch {
             print("Error occured while saving new product: \(error)")
         }
         tableView.reloadData()
     }
+
 }
