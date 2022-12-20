@@ -21,7 +21,10 @@ class StatisticCell: UITableViewCell {
     let proteinNutrientView = NutrientInfo(name: "Proteins", amount: 0, imageName: "Proteins")
     let fatsNutrientView = NutrientInfo(name: "Fats", amount: 0, imageName: "Fats")
     let carbsNutrientView = NutrientInfo(name: "Carbs", amount: 0, imageName: "Carbs")
+    let caloriesNutrientView = NutrientInfo(name: "Calories", amount: 0, imageName: "Vector.pdf")
+    let waterNutrientView = NutrientInfo(name: "Water", amount: 0, imageName: "drop.pdf")
     
+    var nutrientViews: [NutrientInfo] = []
     
     let calorieWaterStackView = makeStackView(axis: .horizontal)
     
@@ -64,6 +67,10 @@ class StatisticCell: UITableViewCell {
         nutrientsStackView.distribution = .fillEqually
         nutrientsStackView.spacing = 8
         
+      
+        
+        print(UIScreen.main.bounds)
+        
         
 //        proteinNutrientView.nutrientNameLabel.fo
         
@@ -81,9 +88,7 @@ class StatisticCell: UITableViewCell {
         
         calorieStackView.spacing = 5
         waterStackView.spacing = 5
-        
-        
-//        parentStackView.distribution = .fillEqually
+
     }
     
     
@@ -94,36 +99,23 @@ class StatisticCell: UITableViewCell {
         dateStackView.addArrangedSubview(monthLabel)
         
         
+        contentView.addSubview(nutrientsStackView)
         nutrientsStackView.addArrangedSubview(proteinNutrientView)
         nutrientsStackView.addArrangedSubview(fatsNutrientView)
         nutrientsStackView.addArrangedSubview(carbsNutrientView)
-        
-        
-        calorieStackView.addArrangedSubview(caloriesImageView)
-        calorieStackView.addArrangedSubview(caloriesAmountLabel)
-        
-        waterStackView.addArrangedSubview(waterImageView)
-        waterStackView.addArrangedSubview(waterAmountLabel)
-        
-        
-        calorieWaterStackView.addArrangedSubview(calorieStackView)
-        calorieWaterStackView.addArrangedSubview(waterStackView)
-        
-        contentView.addSubview(parentStackView)
-        parentStackView.addArrangedSubview(calorieWaterStackView)
-        parentStackView.addArrangedSubview(nutrientsStackView)
+        nutrientsStackView.addArrangedSubview(caloriesNutrientView)
+        nutrientsStackView.addArrangedSubview(waterNutrientView)
         
         NSLayoutConstraint.activate([
             dateStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
             dateStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24)
         ])
         
-        
-        
+
         NSLayoutConstraint.activate([
-            parentStackView.centerYAnchor.constraint(equalTo: dateStackView.centerYAnchor),
-            parentStackView.leadingAnchor.constraint(equalTo: dateStackView.leadingAnchor, constant: 16),
-            parentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16)
+            nutrientsStackView.leadingAnchor.constraint(equalTo: dateStackView.trailingAnchor, constant: 16),
+            nutrientsStackView.centerYAnchor.constraint(equalTo: dateStackView.centerYAnchor),
+            nutrientsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8)
         ])
 
         

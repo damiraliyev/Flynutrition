@@ -33,7 +33,7 @@ class StatisticsViewController: UIViewController {
         tableView.dataSource = self
         
         tableView.register(StatisticCell.self, forCellReuseIdentifier: StatisticCell.reuseID)
-        tableView.rowHeight = 135
+        tableView.rowHeight = 125
     }
     
     private func layout() {
@@ -50,7 +50,9 @@ class StatisticsViewController: UIViewController {
 
 
 extension StatisticsViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 }
 
 extension StatisticsViewController: UITableViewDataSource {
