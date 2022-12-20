@@ -10,7 +10,7 @@ import CoreData
 
 
 protocol StatisticsDelegate: AnyObject {
-    func dateChanged(statistics: DailyStatistic)
+    func dateChanged(statistics: DailyStatistics)
 }
 
 class DayStatisticsViewController: UIViewController {
@@ -591,23 +591,36 @@ extension DayStatisticsViewController{
         let day = calendar.component(.day, from: date)
         let month = calendar.component(.month, from: date)
 
-        let consumedCaloriesForDay = dailyRateCalories - (Int(dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text?.dropLast(2) ?? "0") ?? 0)
-       print("Consumed:", Int(dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text?.dropLast(2) ?? "0") ?? 0)
-        let consumedWaterForDay = dailyWaterRate - (Int(dayProgressComponent.waterProgressComponent.elementRemainLabel.text?.dropLast(2) ?? "0") ?? 0)
-       
-        let consumedProteinsForDay = Float(dayProgressComponent.proteinsProgressBar.consumedAmountLabel.text ?? "0") ?? 0
         
-        let consumedFatsForDay = Float(dayProgressComponent.fatsProgressBar.consumedAmountLabel.text ?? "0") ?? 0
-        
-        let consumedCarbsForDay = Float(dayProgressComponent.carbsProgressBar.consumedAmountLabel.text ?? "0") ?? 0
-        
-        print("ADDADADSDAA: ", consumedCaloriesForDay)
-        let statisticsModel = DailyStatistic(day: day - 1, month: month, calories: consumedCaloriesForDay, water: consumedWaterForDay, proteins: consumedProteinsForDay, fats: consumedFatsForDay, carbs: consumedCarbsForDay)
-//    
+//
+//        let statisticsModel = DailyStatistic(day: day - 1, month: month, calories: consumedCaloriesForDay, water: consumedWaterForDay, proteins: consumedProteinsForDay, fats: consumedFatsForDay, carbs: consumedCarbsForDay)
+//
 //        let testDay = 19
 //        let testMonth = 12
         
-        if LocalState.day != day || (LocalState.day == day){
+        if LocalState.day != day || (LocalState.day == day && LocalState.month != month){
+            
+            
+            let consumedCaloriesForDay = dailyRateCalories - (Int(dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text?.dropLast(2) ?? "0") ?? 0)
+           print("Consumed:", Int(dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text?.dropLast(2) ?? "0") ?? 0)
+            let consumedWaterForDay = dailyWaterRate - (Int(dayProgressComponent.waterProgressComponent.elementRemainLabel.text?.dropLast(2) ?? "0") ?? 0)
+           
+            let consumedProteinsForDay = Float(dayProgressComponent.proteinsProgressBar.consumedAmountLabel.text ?? "0") ?? 0
+            
+            let consumedFatsForDay = Float(dayProgressComponent.fatsProgressBar.consumedAmountLabel.text ?? "0") ?? 0
+            
+            let consumedCarbsForDay = Float(dayProgressComponent.carbsProgressBar.consumedAmountLabel.text ?? "0") ?? 0
+
+            
+            let statisticsModel = DailyStatistics(context: context)
+            statisticsModel.day = Int32(day)
+            statisticsModel.month = Int32(month)
+            statisticsModel.calories = Int32(consumedCaloriesForDay)
+            statisticsModel.water = Int32(consumedWaterForDay)
+            statisticsModel.proteins = consumedProteinsForDay
+            statisticsModel.fats = consumedFatsForDay
+            statisticsModel.carbs = consumedCarbsForDay
+
             statisticsDelegate?.dateChanged(statistics: statisticsModel)
             var i = consumedProducts.count - 1
             
@@ -616,6 +629,9 @@ extension DayStatisticsViewController{
                 i -= 1
 
             }
+            
+            LocalState.day = day
+            LocalState.month = month
             
         }
     }

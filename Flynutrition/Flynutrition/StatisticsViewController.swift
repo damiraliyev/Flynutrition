@@ -22,9 +22,12 @@ class StatisticsViewController: UIViewController {
         super.viewDidLoad()
         title = "Statistics"
         view.backgroundColor = .white
+        loadStatistics()
         setup()
         layout()
-        loadStatistics()
+        
+       
+        allowOnly7Items()
         
         
 //        registerForNotifications()
@@ -61,20 +64,20 @@ class StatisticsViewController: UIViewController {
 }
 
 extension StatisticsViewController: StatisticsDelegate {
-    func dateChanged(statistics: DailyStatistic) {
-//        let statistics = statistics
+    func dateChanged(statistics: DailyStatistics) {
+
         
-        let dayStatistics = DailyStatistics(context: context)
-        dayStatistics.day = Int32(statistics.day)
-        dayStatistics.calories = Int32(statistics.calories)
-        dayStatistics.water = Int32(statistics.water)
-        dayStatistics.proteins = statistics.proteins
-        dayStatistics.fats = statistics.fats
-        dayStatistics.carbs = statistics.carbs
-        
-        
-        dailyStatictics.insert(dayStatistics, at: 0)
+        dailyStatictics.insert(statistics, at: 0)
+ 
         saveStatistics()
+    }
+    
+    func allowOnly7Items() {
+        if dailyStatictics.count == 8{
+            context.delete(dailyStatictics[7])
+            dailyStatictics.remove(at: 7)
+            saveStatistics()
+        }
     }
     
     
@@ -94,6 +97,7 @@ extension StatisticsViewController: UITableViewDelegate {
         if editingStyle == .delete {
             context.delete(dailyStatictics[indexPath.row])
             dailyStatictics.remove(at: indexPath.row)
+            
             saveStatistics()
         }
     }
@@ -130,7 +134,7 @@ extension StatisticsViewController {
         let request: NSFetchRequest<DailyStatistics> = DailyStatistics.fetchRequest()
         
         do {
-            dailyStatictics = try context.fetch(request)
+            dailyStatictics = try context.fetch(request).reversed()
         } catch {
             
         }
