@@ -7,12 +7,15 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 class StatisticsViewController: UIViewController {
     
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
     let tableView = UITableView()
     
-    var dailyStatictics: [DailyStatistic] = []
+    var dailyStatictics: [DailyStatistics] = []
     
     
     override func viewDidLoad() {
@@ -21,6 +24,7 @@ class StatisticsViewController: UIViewController {
         view.backgroundColor = .white
         setup()
         layout()
+        loadStatistics()
         
         
 //        registerForNotifications()
@@ -54,23 +58,23 @@ class StatisticsViewController: UIViewController {
         ])
     }
     
-    
-   
-    
-    @objc func addStatistics(_ notification: Notification) {
-        print("HERE")
-        let statistics = notification.userInfo?["dailyStatistics"] as! DailyStatistic
-        
-        dailyStatictics.append(statistics)
-        tableView.reloadData()
-    }
 }
 
 extension StatisticsViewController: StatisticsDelegate {
     func dateChanged(statistics: DailyStatistic) {
-        let statistics = statistics
-        dailyStatictics.append(statistics)
-        tableView.reloadData()
+//        let statistics = statistics
+        
+        let dayStatistics = DailyStatistics(context: context)
+        dayStatistics.day = Int32(statistics.day)
+        dayStatistics.calories = Int32(statistics.calories)
+        dayStatistics.water = Int32(statistics.water)
+        dayStatistics.proteins = statistics.proteins
+        dayStatistics.fats = statistics.fats
+        dayStatistics.carbs = statistics.carbs
+        
+        
+        dailyStatictics.insert(dayStatistics, at: 0)
+        saveStatistics()
     }
     
     
@@ -80,6 +84,18 @@ extension StatisticsViewController: StatisticsDelegate {
 extension StatisticsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            context.delete(dailyStatictics[indexPath.row])
+            dailyStatictics.remove(at: indexPath.row)
+            saveStatistics()
+        }
     }
 }
 
@@ -96,3 +112,29 @@ extension StatisticsViewController: UITableViewDataSource {
     
     
 }
+
+//CoreData functions
+
+extension StatisticsViewController {
+    func saveStatistics() {
+        do {
+            try context.save()
+        } catch {
+            print("Error occured while saving statistics: \(error)")
+        }
+        tableView.reloadData()
+    }
+    
+    
+    func loadStatistics() {
+        let request: NSFetchRequest<DailyStatistics> = DailyStatistics.fetchRequest()
+        
+        do {
+            dailyStatictics = try context.fetch(request)
+        } catch {
+            
+        }
+        tableView.reloadData()
+    }
+}
+

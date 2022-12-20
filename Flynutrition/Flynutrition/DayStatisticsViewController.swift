@@ -242,7 +242,7 @@ class DayStatisticsViewController: UIViewController {
         newConsumedProduct.measure = measure
         
         consumedProducts.insert(newConsumedProduct, at: 0)
-        saveItems()
+        saveConsumedProduct()
         
         
         if newConsumedProduct.name?.lowercased() == "water" {
@@ -549,7 +549,7 @@ extension DayStatisticsViewController {
         }
     }
     
-    func saveItems() {
+    func saveConsumedProduct() {
         do {
             try context.save()
         } catch {
@@ -592,7 +592,7 @@ extension DayStatisticsViewController{
         let month = calendar.component(.month, from: date)
 
         let consumedCaloriesForDay = dailyRateCalories - (Int(dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text?.dropLast(2) ?? "0") ?? 0)
-       
+       print("Consumed:", Int(dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text?.dropLast(2) ?? "0") ?? 0)
         let consumedWaterForDay = dailyWaterRate - (Int(dayProgressComponent.waterProgressComponent.elementRemainLabel.text?.dropLast(2) ?? "0") ?? 0)
        
         let consumedProteinsForDay = Float(dayProgressComponent.proteinsProgressBar.consumedAmountLabel.text ?? "0") ?? 0
@@ -601,20 +601,22 @@ extension DayStatisticsViewController{
         
         let consumedCarbsForDay = Float(dayProgressComponent.carbsProgressBar.consumedAmountLabel.text ?? "0") ?? 0
         
+        print("ADDADADSDAA: ", consumedCaloriesForDay)
         let statisticsModel = DailyStatistic(day: day - 1, month: month, calories: consumedCaloriesForDay, water: consumedWaterForDay, proteins: consumedProteinsForDay, fats: consumedFatsForDay, carbs: consumedCarbsForDay)
-    
-        let testDay = 19
-        let testMonth = 12
+//    
+//        let testDay = 19
+//        let testMonth = 12
         
-        if LocalState.day != testDay || (LocalState.day == day && LocalState.month != month){
-            
+        if LocalState.day != day || (LocalState.day == day){
+            statisticsDelegate?.dateChanged(statistics: statisticsModel)
             var i = consumedProducts.count - 1
+            
             while consumedProducts.count != 0 {
                 processAfterDeletingConsumedProduct(index: i)
                 i -= 1
 
             }
-            statisticsDelegate?.dateChanged(statistics: statisticsModel)
+            
         }
     }
     
@@ -650,6 +652,6 @@ extension DayStatisticsViewController{
         context.delete(consumedProducts[i])
         consumedProducts.remove(at: i)
         
-        saveItems()
+        saveConsumedProduct()
     }
 }

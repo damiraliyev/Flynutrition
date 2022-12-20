@@ -34,7 +34,7 @@ public class LocalState {
                 let calendar = Calendar.current
                 
                 let day = calendar.component(.day, from: date)
-                let month = calendar.component(.month, from: date)
+               
                 return day
             }
         
@@ -52,8 +52,7 @@ public class LocalState {
             if UserDefaults.standard.integer(forKey: Keys.month.rawValue) == 0 {
                 let date = Date()
                 let calendar = Calendar.current
-                
-                let day = calendar.component(.day, from: date)
+               
                 let month = calendar.component(.month, from: date)
                 return month
             }

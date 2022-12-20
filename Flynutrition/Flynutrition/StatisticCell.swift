@@ -121,7 +121,7 @@ class StatisticCell: UITableViewCell {
         
     }
     
-    func configureStatisticsCell(statistics: DailyStatistic) {
+    func configureStatisticsCell(statistics: DailyStatistics) {
         dayLabel.text = String(statistics.day)
         
         switch statistics.month {
