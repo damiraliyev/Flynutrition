@@ -8,8 +8,8 @@
 import Foundation
 import UIKit
 
-var activeModeMeasures: [String: Double] = ["proteins": 1.5, "fats": 0.9, "carbs": 2.0]
-var passiveModeMeasures: [String: Double] = ["proteins": 0.8, "fats": 0.7, "carbs": 1.5]
+var activeModeMeasures: [String: Double] = ["proteins": 1.8, "fats": 1.4, "carbs": 5]
+var passiveModeMeasures: [String: Double] = ["proteins": 0.8, "fats": 1.1, "carbs": 3.5]
 class SettingsViewController: UIViewController {
     
     let tipLabel = UILabel()
@@ -27,9 +27,7 @@ class SettingsViewController: UIViewController {
     var activeModeMeasures: [String: Double] = ["proteins": 1.5, "fats": 0.9, "carbs": 2.0]
 //
     let passiveMode = ActivityModeView(isOn: false, modeText: "Passive mode", id: 1)
-//
-//    var passiveModeMeasures: [String: Double] = ["proteins": 0.8, "fats": 0.7, "carbs": 1.5]
-//    
+
     let applyButton = makeButton(color: .systemBlue)
     
     let errorLabel = UILabel()
@@ -154,9 +152,7 @@ class SettingsViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-//            applyButton.topAnchor.constraint(equalTo: passiveMode.bottomAnchor, constant: 40),
             applyButton.topAnchor.constraint(equalTo: passiveMode.bottomAnchor, constant: 64),
-//            applyButton.leadingAnchor.constraint(equalTo: activeMode.leadingAnchor),
             applyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             applyButton.widthAnchor.constraint(equalToConstant: 100),
             applyButton.heightAnchor.constraint(equalToConstant: 40)

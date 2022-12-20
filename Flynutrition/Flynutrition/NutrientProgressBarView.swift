@@ -48,7 +48,7 @@ class NutrientProgressBarView: UIView {
         progressBar.translatesAutoresizingMaskIntoConstraints = false
         progressBar.progressTintColor = .systemOrange
         progressBar.trackTintColor = .systemGray2
-//        progressBar.transform = progressBar.transform.scaledBy(x: 1, y: 3)
+
         
         consumedAmountLabel.translatesAutoresizingMaskIntoConstraints = false
         consumedAmountLabel.textColor = .systemOrange

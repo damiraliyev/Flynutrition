@@ -39,11 +39,9 @@ class AddProductCell: UITableViewCell {
     
     func setup() {
         productNameLabel.translatesAutoresizingMaskIntoConstraints = false
-//        productNameLabel.text = "Rice"
         productNameLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
         amountLabel.translatesAutoresizingMaskIntoConstraints = false
-//        amountLabel.text = "120g"
         amountLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
         calorieImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -51,7 +49,6 @@ class AddProductCell: UITableViewCell {
         calorieImageView.tintColor = .systemGreen
         
         calorieAmountLabel.translatesAutoresizingMaskIntoConstraints = false
-//        calorieAmountLabel.text = "120kC"
         calorieAmountLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         calorieAmountLabel.textColor = .systemGreen
         
@@ -64,9 +61,7 @@ class AddProductCell: UITableViewCell {
         addButton.tintColor = .white
         
         addButton.addTarget(self, action: #selector(addPressed), for: .primaryActionTriggered)
-        
-    
-//        addButton.titleLabel?.font = UIFont.systemFont(ofSize: 30)
+
     }
     
     func layout() {
@@ -130,8 +125,6 @@ class AddProductCell: UITableViewCell {
         guard let productName = productNameLabel.text else { return }
         guard var amount = amountLabel.text?.dropLast() else { return }
         
-       
-        //for g we need to drop one character, for ml 2 characters
         if amount.last == "m" {
             amount = amount.dropLast()
         }
@@ -144,14 +137,6 @@ class AddProductCell: UITableViewCell {
         ] as [String : Any]
         
         NotificationCenter.default.post(name: Notification.Name("AddProduct"), object: nil, userInfo: productInfo)
-        
-//        addProductDelegate?.addPressed()
-//        guard let productName = productNameLabel.text else { return }
-//        guard let amount = amountLabel.text else { return }
-//        guard let calorieAmout = calorieAmountLabel.text else { return }
-//        let product = Product(name: productName, amount: Int(amount) ?? 0, calories: Int(calorieAmout) ?? 0, proteins: proteins, fats: fats, carbs: carbs, measure: .g)
-//        print("Clicked")
-//        completionHandler?(product)
     }
 
 }

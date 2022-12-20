@@ -13,22 +13,4 @@ enum Measure: String {
     case ml
 }
 
-//struct Product {
-//    let name: String
-//    let amount: Int
-//    let calories: Int
-//    let proteins: Float
-//    let fats: Float
-//    let carbs: Float
-//    let measure: Measure
-//}
 
-struct DailyStatistic {
-    let day: Int
-    let month: Int
-    let calories: Int
-    let water: Int
-    let proteins: Float
-    let fats: Float
-    let carbs: Float
-}

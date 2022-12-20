@@ -36,7 +36,7 @@ class DayStatisticsViewController: UIViewController {
     ]
     
     var weight: Double = LocalState.weight
-    var dailyRateCalories = 2200
+    var dailyRateCalories = 2300
     var dailyWaterRate = 2000
     var dailyProteinRate = 105
     var dailyFatsRate = 63
@@ -564,7 +564,7 @@ extension DayStatisticsViewController{
 //
 //        let testDay = 19
 //        let testMonth = 12
-        
+        print(LocalState.day)
         if LocalState.day != day || (LocalState.day == day && LocalState.month != month){
             
             
@@ -580,7 +580,7 @@ extension DayStatisticsViewController{
 
             
             let statisticsModel = DailyStatistics(context: context)
-            statisticsModel.day = Int32(day)
+            statisticsModel.day = Int32(LocalState.day)
             statisticsModel.month = Int32(month)
             statisticsModel.calories = Int32(consumedCaloriesForDay)
             statisticsModel.water = Int32(consumedWaterForDay)
@@ -606,31 +606,32 @@ extension DayStatisticsViewController{
     func processAfterDeletingConsumedProduct(index i: Int) {
         let currentProduct = consumedProducts[i]
        
-        dayProgressComponent.calorieProgressView.progress -= Float(currentProduct.calories) / Float(dailyRateCalories)
-        
-        dayProgressComponent.waterProgressView.progress -= Float(currentProduct.amount) / Float(dailyWaterRate)
-        
-       recalculateProgressAfterDeleting(currentProduct: currentProduct)
-        
-       
-        guard let remainText = dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text?.dropLast(2) else { return }
-        
-        guard let remainTextWater = dayProgressComponent.waterProgressComponent.elementRemainLabel.text?.dropLast(2) else { return }
-        print("RemainText", remainText)
-        let remainAmountCalorie = (Int32(remainText) ?? 0) + currentProduct.calories
-        print(remainAmountCalorie)
-        if  currentProduct.name?.lowercased() == "water" {
+        if currentProduct.name?.lowercased() == "water" {
+            
+            guard let remainTextWater = dayProgressComponent.waterProgressComponent.elementRemainLabel.text?.dropLast(2) else { return }
+            dayProgressComponent.waterProgressView.progress -= Float(currentProduct.amount) / Float(dailyWaterRate)
+            
             let remainAmountWater = (Int32(remainTextWater) ?? 0) + currentProduct.amount
             changeTextBasedOnRemainder(remainAmount: remainAmountWater, isWater: true)
             dayProgressComponent.waterProgressComponent.elementRemainLabel.text = String(remainAmountWater) + "ml"
+            print("Accidentally delete ")
+            
+        } else {
+            dayProgressComponent.calorieProgressView.progress -= Float(currentProduct.calories) / Float(dailyRateCalories)
+            guard let remainText = dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text?.dropLast(2) else { return }
+            
+           
+            print("RemainText", remainText)
+            let remainAmountCalorie = (Int32(remainText) ?? 0) + currentProduct.calories
+            changeTextBasedOnRemainder(remainAmount: remainAmountCalorie, isWater: false)
+            
+            dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text = String(remainAmountCalorie) + "kC"
         }
+      
         
         
-        changeTextBasedOnRemainder(remainAmount: remainAmountCalorie, isWater: false)
         
-        
-        dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text = String(remainAmountCalorie) + "kC"
-        
+       recalculateProgressAfterDeleting(currentProduct: currentProduct)
         
         context.delete(consumedProducts[i])
         consumedProducts.remove(at: i)

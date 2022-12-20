@@ -110,16 +110,6 @@ class ConsumedProductCell: UITableViewCell {
             consumedNutrientStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
         ])
         
-//        NSLayoutConstraint.activate([
-//            proteinsView.widthAnchor.constraint(equalToConstant: 35),
-//            proteinsView.heightAnchor.constraint(equalToConstant: 25),
-//            fatsView.widthAnchor.constraint(equalToConstant: 25),
-//            fatsView.heightAnchor.constraint(equalToConstant: 25),
-//            carbsView.widthAnchor.constraint(equalToConstant: 25),
-//            carbsView.heightAnchor.constraint(equalToConstant: 25),
-//            
-//        ])
-        
     }
     
     required init?(coder: NSCoder) {

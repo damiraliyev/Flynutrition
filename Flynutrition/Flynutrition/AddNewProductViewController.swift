@@ -159,10 +159,7 @@ class AddNewProductViewController: UIViewController {
         product.fats = Float(fatsField.textField.text!)!
         product.carbs = Float(carbsField.textField.text!)!
         product.measure = measures[measureSegmentedControl.selectedSegmentIndex].rawValue
-//
-//        let product = Product(name: nameField.textField.text!, amount: 100, calories: Int(caloriesField.textField.text!)!, proteins: Float(proteinsField.textField.text!)!, fats: Float(fatsField.textField.text!)!, carbs: Float(carbsField.textField.text!)!, measure: measures[measureSegmentedControl.selectedSegmentIndex])
-        
-        
+
         
         NotificationCenter.default.post(name: newProductAdded, object: nil, userInfo: ["product": product])
         

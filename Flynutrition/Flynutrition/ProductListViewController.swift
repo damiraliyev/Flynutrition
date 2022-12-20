@@ -225,9 +225,7 @@ extension ProductListViewController {
     }
     
     func loadProducts(with request: NSFetchRequest<Product> = Product.fetchRequest()) {
-//        let request: NSFetchRequest<Product> = Product.fetchRequest()
 
-        
         do {
             products = try context.fetch(request)
             

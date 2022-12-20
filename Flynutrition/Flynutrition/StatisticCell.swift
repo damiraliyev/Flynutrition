@@ -56,7 +56,6 @@ class StatisticCell: UITableViewCell {
         let calendar = Calendar.current
         
         let day = calendar.component(.day, from: date)
-        let month = calendar.component(.month, from: date)
         
         dayLabel.text = String(day)
         dayLabel.font = UIFont.boldSystemFont(ofSize: 25)

@@ -20,14 +20,7 @@ class ActivityModeView: UIView {
     var id = 0
     
     weak var switchDelegate: SwitchDelegate?
-//
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//
-//        setup()
-//        layout()
-//    }
-//
+
     init(isOn: Bool, modeText: String, id: Int) {
         super.init(frame: .zero)
         

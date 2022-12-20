@@ -14,10 +14,7 @@ class LabelTextFieldView: UIView {
     let textField = UITextField()
     
     let bottomLineView = UIView()
-    
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//    }
+
     
     init(text: String) {
         super.init(frame: .zero)
