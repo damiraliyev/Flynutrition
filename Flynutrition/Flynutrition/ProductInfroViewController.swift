@@ -41,6 +41,7 @@ class ProductInfoViewController: UIViewController {
     var carbsAmount: Float = 0
     
     var initialCalories: Int = 0
+    var initialAmount: Int = 0
     var initialProteins: Float = 0
     var initialFats: Float = 0
     var initialCarbs: Float = 0
@@ -88,7 +89,7 @@ class ProductInfoViewController: UIViewController {
         
 //        measure = "g"
         
-        massLabel.text = massLabel.text! + "(\(measure))"
+        massLabel.text = massLabel.text! + "(\(measure)) (Integer value)"
         
         
         amountTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -215,6 +216,7 @@ class ProductInfoViewController: UIViewController {
         carbsAmount = product.carbs
         
         initialCalories = Int(calorieAmountLabel.text!.dropLast(2))!
+        initialAmount = Int(product.amount)
         initialProteins = proteinsAmount
         initialFats = fatsAmount
         initialCarbs = carbsAmount
@@ -249,15 +251,20 @@ extension ProductInfoViewController: UITextFieldDelegate {
         //Change the amount if value was changed
         //Decided to put amountTextField.text value instead of amount, because intially there was the first one
         // And initally amountTextField.text will be displayed and I decided leave it it like this
-        amount = Int32(Int(sender.text ?? "") ?? 0)
-        amountTextField.text = String(amount)
-        print("Amount", amount)
-        print(Int(sender.text ?? ""))
+        var senderText = sender.text
+        if senderText?.count ?? 0 < 6 {
+            amount = Int32(Int(sender.text ?? "") ?? 0)
+            amountTextField.text = String(amount)
+        } else {
+            senderText = String(senderText?.dropLast() ?? "")
+            amountTextField.text = senderText
+            
+        }
         
-        caloriesAmount = (amount * Int32(initialCalories)) / 100
-        proteinsAmount = round((Float(amount) * initialProteins) / 100 * 10) / 10
-        fatsAmount = round((Float(amount) * initialFats) / 100 * 10) / 10
-        carbsAmount = round((Float(amount) * initialCarbs) / 100 * 10) / 10
+        caloriesAmount = (amount * Int32(initialCalories)) / Int32(initialAmount)
+        proteinsAmount = round((Float(amount) * initialProteins) / Float(initialAmount) * 10) / 10
+        fatsAmount = round((Float(amount) * initialFats) / Float(initialAmount) * 10) / 10
+        carbsAmount = round((Float(amount) * initialCarbs) / Float(initialAmount) * 10) / 10
         
         calorieAmountLabel.text = String(caloriesAmount) + "kC"
         setCalorieLabel()

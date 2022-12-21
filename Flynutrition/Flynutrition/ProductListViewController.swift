@@ -105,17 +105,18 @@ class ProductListViewController: UIViewController {
     
     
     func addInitialProducts() {
-        let productNames = ["Water", "Potato", "Rice", "Banana"]
-        let productCalories = [0, 77, 130, 89]
-        let productProteins = [0, 2, 2.7, 1.1]
-        let productFats = [0, 0.1, 0.3, 0.3]
-        let productCarbs = [0, 17, 28, 23]
-        let productMeasures = ["ml", "g", "g", "g"]
+        let productNames = ["Water", "Potato", "Carrot", "Rice", "Banana", "Apple", "Orange", "Spaghetti(Sultan)", "Macaroni(Sultan)", "Buckwheat", "Oats","Sour cream 10%", "Sour cream 15%", "Sour cream 20%", "Milk(Lactel)", "Butter 82%", "White bread", "Rye bread", "Snickers (small)"]
+        let productCalories = [0, 77, 41, 130, 89, 52, 47, 344, 344, 343, 379, 118, 162, 206, 43, 743, 265, 259, 250]
+        let amounts = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 50]
+        let productProteins = [0, 2, 0.9, 2.7, 1.1, 0.3, 0.9, 10.4, 10.4, 13.3, 13.2, 2.85, 2.8, 2.7, 2.8, 0.7, 9, 9, 4]
+        let productFats = [0, 0.1, 0.3, 0.2, 0.3, 0.2, 0.1, 1.1, 1.1, 3.4, 6.52, 10, 15, 20, 1.5, 82, 3.2, 3.3, 12.8]
+        let productCarbs = [0, 17, 10, 28, 23, 14, 12, 71.5, 71.5, 71.5, 67.7, 4.2, 4, 3.8, 4.6, 0.5, 49, 48, 28]
+        let productMeasures = ["ml", "g", "g","g", "g", "g", "g", "g", "g", "g", "g", "g", "g", "g", "ml", "g", "g", "g", "g"]
         
         for i in 0...productNames.count-1 {
             let initialProduct = Product(context: context)
             initialProduct.name = productNames[i]
-            initialProduct.amount = 100
+            initialProduct.amount = Int32(amounts[i])
             initialProduct.calories = Int32(productCalories[i])
             initialProduct.proteins = Float(productProteins[i])
             initialProduct.fats = Float(productFats[i])

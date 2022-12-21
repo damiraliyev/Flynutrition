@@ -40,6 +40,8 @@ class AddProductCell: UITableViewCell {
     func setup() {
         productNameLabel.translatesAutoresizingMaskIntoConstraints = false
         productNameLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+
+        
         
         amountLabel.translatesAutoresizingMaskIntoConstraints = false
         amountLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -73,7 +75,8 @@ class AddProductCell: UITableViewCell {
         
         NSLayoutConstraint.activate([
             productNameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            productNameLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
+            productNameLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+           
         ])
         
         NSLayoutConstraint.activate([
@@ -110,6 +113,7 @@ class AddProductCell: UITableViewCell {
     
     func configureProductCell(product: Product) {
         productNameLabel.text = product.name
+        
         calorieAmountLabel.text = String(product.calories) + "kC"
         amountLabel.text = String(product.amount) + (product.measure ?? "g")
         proteins = product.proteins

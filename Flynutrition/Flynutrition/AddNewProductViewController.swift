@@ -17,13 +17,15 @@ class AddNewProductViewController: UIViewController {
     
     let nameField = LabelTextFieldView(text: "Name of the product")
     
-    let caloriesField = LabelTextFieldView(text: "Calories(kC) for 100g")
+    let amountField = LabelTextFieldView(text: "Amount of the product")
     
-    let proteinsField = LabelTextFieldView(text: "Proteins(g) for 100g")
+    let caloriesField = LabelTextFieldView(text: "Calories(kC)")
     
-    let fatsField = LabelTextFieldView(text: "Fats(g) for 100g")
+    let proteinsField = LabelTextFieldView(text: "Proteins(g)")
     
-    let carbsField = LabelTextFieldView(text: "Carbs(g) for 100g")
+    let fatsField = LabelTextFieldView(text: "Fats(g)")
+    
+    let carbsField = LabelTextFieldView(text: "Carbs(g)")
     
     let addNewProductButton = makeButton(color: .systemBlue)
     
@@ -80,6 +82,7 @@ class AddNewProductViewController: UIViewController {
         view.addSubview(fieldsStackView)
         
         fieldsStackView.addArrangedSubview(nameField)
+        fieldsStackView.addArrangedSubview(amountField)
         fieldsStackView.addArrangedSubview(caloriesField)
         fieldsStackView.addArrangedSubview(proteinsField)
         fieldsStackView.addArrangedSubview(fatsField)
@@ -133,6 +136,12 @@ class AddNewProductViewController: UIViewController {
             return
         }
         
+        errorOccured = showErrorLabel(field: amountField, nutrientName: "amount")
+        
+        if errorOccured {
+            return
+        }
+        
         errorOccured = showErrorLabel(field: caloriesField, nutrientName: "calories")
         
         if errorOccured {
@@ -153,7 +162,7 @@ class AddNewProductViewController: UIViewController {
         
         let product = Product(context: context)
         product.name = nameField.textField.text!
-        product.amount = 100
+        product.amount = Int32(amountField.textField.text!)!
         product.calories = Int32(caloriesField.textField.text!)!
         product.proteins = Float(proteinsField.textField.text!)!
         product.fats = Float(fatsField.textField.text!)!
@@ -176,11 +185,25 @@ class AddNewProductViewController: UIViewController {
             return true
         }
         
-        if Int(field.textField.text!) == nil {
-            errorLabel.isHidden = false
-            errorLabel.text = "Please, write correct value to \(nutrientName) field"
-            return true
+        if nutrientName == "proteins" || nutrientName == "carbs" || nutrientName == "fats" {
+            if Float(field.textField.text!) == nil {
+                errorLabel.isHidden = false
+                errorLabel.text = "Please, write correct value to \(nutrientName) field"
+                
+                return true
+            }
+        } else {
+            if Int(field.textField.text!) == nil {
+                errorLabel.isHidden = false
+               
+                errorLabel.text = "Please, write integer value to \(nutrientName) field"
+                
+                
+                return true
+            }
         }
+        
+       
         
         return false
     }

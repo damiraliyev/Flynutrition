@@ -565,7 +565,7 @@ extension DayStatisticsViewController{
 //        let testDay = 19
 //        let testMonth = 12
         print(LocalState.day)
-        if LocalState.day != day || (LocalState.day == day && LocalState.month != month){
+        if LocalState.day != 22 || (LocalState.day == day && LocalState.month != month){
             
             
             let consumedCaloriesForDay = dailyRateCalories - (Int(dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text?.dropLast(2) ?? "0") ?? 0)

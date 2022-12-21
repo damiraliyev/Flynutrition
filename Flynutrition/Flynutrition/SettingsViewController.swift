@@ -24,7 +24,7 @@ class SettingsViewController: UIViewController {
     
     var activeMode = ActivityModeView(isOn: true, modeText: "Active mode", id: 0)
     
-    var activeModeMeasures: [String: Double] = ["proteins": 1.5, "fats": 0.9, "carbs": 2.0]
+//    var activeModeMeasures: [String: Double] = ["proteins": 1.5, "fats": 0.9, "carbs": 2.0]
 //
     let passiveMode = ActivityModeView(isOn: false, modeText: "Passive mode", id: 1)
 

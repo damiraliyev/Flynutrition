@@ -78,7 +78,6 @@
 		689B2F8D2920B2C100302362 = {
 			isa = PBXGroup;
 			children = (
-				68B04D7A29253ECF00C56932 /* ProductInfroViewController.swift */,
 				689B2F982920B2C100302362 /* Flynutrition */,
 				689B2F972920B2C100302362 /* Products */,
 			);
@@ -101,6 +100,7 @@
 				689B2F9D2920B2C100302362 /* DayStatisticsViewController.swift */,
 				689B2FC02920C08400302362 /* ProductListViewController.swift */,
 				6819EF0C294F055400D80F39 /* AddNewProductViewController.swift */,
+				68B04D7A29253ECF00C56932 /* ProductInfroViewController.swift */,
 				6819EF0E294F061300D80F39 /* LabelTextFieldView.swift */,
 				68181454294A024C00A165EF /* SettingsViewController.swift */,
 				68181456294A034400A165EF /* ActivityModeView.swift */,
