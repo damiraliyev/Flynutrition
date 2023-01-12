@@ -558,14 +558,9 @@ extension DayStatisticsViewController{
         let day = calendar.component(.day, from: date)
         let month = calendar.component(.month, from: date)
 
-        
-//
-//        let statisticsModel = DailyStatistic(day: day - 1, month: month, calories: consumedCaloriesForDay, water: consumedWaterForDay, proteins: consumedProteinsForDay, fats: consumedFatsForDay, carbs: consumedCarbsForDay)
-//
-//        let testDay = 19
-//        let testMonth = 12
+
         print(LocalState.day)
-        if LocalState.day != 22 || (LocalState.day == day && LocalState.month != month){
+        if LocalState.day != day || (LocalState.day == day && LocalState.month != month){
             
             
             let consumedCaloriesForDay = dailyRateCalories - (Int(dayProgressComponent.caloriesProgressComponent.elementRemainLabel.text?.dropLast(2) ?? "0") ?? 0)
