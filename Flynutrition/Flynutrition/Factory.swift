@@ -44,7 +44,7 @@ extension UIButton {
         alpha = 0.5
         
         UIView.animate(withDuration: 0.5, delay: 0) { [weak self] in
-            self!.alpha = 1
+            self?.alpha = 1
         }
     }
 }
