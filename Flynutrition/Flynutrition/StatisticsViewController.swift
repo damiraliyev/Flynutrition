@@ -100,9 +100,9 @@ class StatisticsViewController: UIViewController {
         if dailyStatictics.count == 0 {
             familiarizationLabel.isHidden = false
             statisticsImageView.isHidden = false
-            print("A")
+            
         } else {
-            print("Not zero")
+            
             familiarizationLabel.isHidden = true
             statisticsImageView.isHidden = true
             

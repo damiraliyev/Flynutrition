@@ -11,6 +11,23 @@ import CoreData
 
 class AddNewProductViewController: UIViewController {
     
+    lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.backgroundColor = .white
+        scrollView.frame = view.bounds
+        scrollView.contentSize = contentViewSize
+        return scrollView
+    }()
+    
+    lazy var contentViewSize = CGSize(width: self.view.frame.width, height: self.view.frame.height + 50)
+    
+    lazy var containerView: UIView = {
+        let view = UIView()
+        view.frame.size = contentViewSize
+        return view
+    }()
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     let fieldsStackView = makeStackView(axis: .vertical)
@@ -54,6 +71,7 @@ class AddNewProductViewController: UIViewController {
     }
     
     private func setup() {
+        
         fieldsStackView.spacing = 24
         
         addNewProductButton.setTitle("Add new product", for: .normal)
@@ -79,8 +97,10 @@ class AddNewProductViewController: UIViewController {
     }
     
     private func layout() {
-        view.addSubview(fieldsStackView)
         
+        view.addSubview(scrollView)
+        containerView.addSubview(fieldsStackView)
+       
         fieldsStackView.addArrangedSubview(nameField)
         fieldsStackView.addArrangedSubview(amountField)
         fieldsStackView.addArrangedSubview(caloriesField)
@@ -89,15 +109,23 @@ class AddNewProductViewController: UIViewController {
         fieldsStackView.addArrangedSubview(carbsField)
         
         
-        view.addSubview(measureStack)
+        containerView.addSubview(measureStack)
         measureStack.addArrangedSubview(measureTipLabel)
         measureStack.addArrangedSubview(measureSegmentedControl)
         
-        view.addSubview(errorLabel)
-        view.addSubview(addNewProductButton)
+        containerView.addSubview(errorLabel)
+        containerView.addSubview(addNewProductButton)
+        scrollView.addSubview(containerView)
         
         NSLayoutConstraint.activate([
-            fieldsStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+        ])
+        
+        NSLayoutConstraint.activate([
+            fieldsStackView.topAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.topAnchor, constant: 24),
             fieldsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
             fieldsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8)
         ])
