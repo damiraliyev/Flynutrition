@@ -94,6 +94,8 @@ class AddNewProductViewController: UIViewController {
         
         measureTipLabel.alpha = 0.5
         
+        setupDismissKeyboardGesture()
+        
     }
     
     private func layout() {
@@ -151,6 +153,14 @@ class AddNewProductViewController: UIViewController {
             addNewProductButton.widthAnchor.constraint(equalToConstant: 160),
             addNewProductButton.heightAnchor.constraint(equalToConstant: 45)
         ])
+    }
+    
+    private func setupDismissKeyboardGesture(){
+        let dismissKeyboardTap = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
+        view.addGestureRecognizer(dismissKeyboardTap)
+    }
+    @objc func viewTapped(){
+        view.endEditing(true)
     }
     
     @objc func addNewProduct() {
